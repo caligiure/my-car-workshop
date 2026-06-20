@@ -33,3 +33,15 @@ Dipendenze:
 - Spring Security: per soddisfare la specifica funzionale sull'autenticazione (login/password) e per la futura integrazione dei token JWT.
 
 - MySQL Driver: driver relativo al database relazionale per il salvataggio di utenti, veicoli e appuntamenti.
+
+### 2. Docker e MySQL per il database
+
+Configurazione:
+
+- image: mysql:8.0
+
+- ports: mappiamo la porta standard 3306 del container sulla porta 3306 del PC
+
+- environment: inietta le variabili d'ambiente per creare automaticamente il database (my_car_workshop_db) e un utente dedicato con relativi permessi all'avvio.
+
+- volumes: crea un volume persistente (mysql_data). Fa in modo che i dati salvati (utenti, veicoli, appuntamenti) non vengano distrutti quando il container viene spento.
