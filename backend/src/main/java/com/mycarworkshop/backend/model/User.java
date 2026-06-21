@@ -1,6 +1,7 @@
 package com.mycarworkshop.backend.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 
 @Entity // Dice a Spring e Hibernate che questa classe Java rappresenta una tabella all'interno del DB
@@ -25,6 +26,11 @@ public class User {
 
     @Column(nullable = false)
     private String role; // Es: "USER" oppure "ADMIN"
+
+    // Relazione: Un utente possiede molti veicoli
+    // cascade = CascadeType.ALL e orphanRemoval = true -> se elimino un utente, elimino anche tutti i veicoli associati a quell'utente
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vehicle> vehicles;
 
     // Costruttore vuoto richiesto da JPA
     public User() {
@@ -56,4 +62,7 @@ public class User {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
+    public List<Vehicle> getVehicles() { return vehicles; }
+    public void setVehicles(List<Vehicle> vehicles) { this.vehicles = vehicles; }
 }
