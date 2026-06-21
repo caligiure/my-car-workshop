@@ -46,7 +46,17 @@ Configurazione:
 
 - volumes: crea un volume persistente (mysql_data). Fa in modo che i dati salvati (utenti, veicoli, appuntamenti) non vengano distrutti quando il container viene spento.
 
-Avvio: sudo docker compose up --detach
+Primo avvio: docker compose up --detach
+
+Check status container: docker ps
+
+Pausa: docker compose stop
+
+Riprendi: docker compose start
+
+Reset container ma senza perdere i dati sul volume: docker compose down
+
+Log in tempo reale: docker compose logs -f
 
 ### 3. Configurazione Spring Boot (Connessione al DB) e Verifica della Connessione
 
