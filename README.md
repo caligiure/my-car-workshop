@@ -38,10 +38,18 @@ Dipendenze:
 
 Configurazione:
 
-- image: mysql:8.0
+- image: mysql:9
 
 - ports: mappiamo la porta standard 3306 del container sulla porta 3306 del PC
 
 - environment: inietta le variabili d'ambiente per creare automaticamente il database (my_car_workshop_db) e un utente dedicato con relativi permessi all'avvio.
 
 - volumes: crea un volume persistente (mysql_data). Fa in modo che i dati salvati (utenti, veicoli, appuntamenti) non vengano distrutti quando il container viene spento.
+
+Avvio: sudo docker compose up --detach
+
+### 3. Configurazione Spring Boot (Connessione al DB) e Verifica della Connessione
+
+Il file di configurazione del back-end è situato al percorso backend/src/main/resources/application.properties
+
+Per avviare l'applicazione Spring Boot lanciare: ./mvnw spring-boot:run dall'interno della cartella backend
