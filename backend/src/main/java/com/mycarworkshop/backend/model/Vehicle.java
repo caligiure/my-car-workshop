@@ -33,6 +33,10 @@ public class Vehicle {
     @JoinColumn(name = "user_id", nullable = false)
     private User owner;
 
+    // Relazione: Un veicolo ha molti appuntamenti (Storico e futuri)
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Appointment> appointments;
+
     // Costruttore vuoto richiesto da JPA
     public Vehicle() {
     }
@@ -67,4 +71,7 @@ public class Vehicle {
 
     public User getOwner() { return owner; }
     public void setOwner(User owner) { this.owner = owner; }
+
+    public java.util.List<Appointment> getAppointments() { return appointments; }
+    public void setAppointments(java.util.List<Appointment> appointments) { this.appointments = appointments; }
 }
