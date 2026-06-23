@@ -1,5 +1,6 @@
 package com.mycarworkshop.backend.dto;
 
+import com.mycarworkshop.backend.model.enums.InterventionType;
 import java.time.LocalDate;
 
 /**
@@ -12,6 +13,7 @@ public class BookingRequestDTO {
     private String timeSlot;
     private Long vehicleId;
     private String notes;
+    private InterventionType interventionType;
 
     // Getters e Setters
     public LocalDate getDate() { return date; }
@@ -25,4 +27,7 @@ public class BookingRequestDTO {
 
     public String getNotes() { return notes; }
     public void setNotes(String notes) { this.notes = notes; }
+
+    public InterventionType getInterventionType() { return interventionType; }
+    public void setInterventionType(InterventionType interventionType) { this.interventionType = interventionType; }
 }

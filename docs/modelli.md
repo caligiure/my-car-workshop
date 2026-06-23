@@ -1,4 +1,4 @@
-# Modelli
+# Modelli (Entity JPA)
 
 I modelli rappresentano le entità principali del sistema e definiscono la struttura dei dati che verranno memorizzati nel database. Ogni modello corrisponde a una tabella nel database e contiene campi che rappresentano le colonne della tabella, oltre a eventuali relazioni con altri modelli.
 

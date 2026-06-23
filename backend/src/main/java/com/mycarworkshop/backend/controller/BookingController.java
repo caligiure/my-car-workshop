@@ -12,6 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * I @RestController espongono le funzionalità dell'applicazione attraverso API RESTful. 
+ * Gestiscono le richieste HTTP e forniscono risposte in formato JSON o XML.
+ * @RequestMapping: definisce il prefisso dell'URL per tutti gli endpoint del controller
+ * NOTA: la logica di business non deve mai essere nel Controller, ma nel Service.
+ */
 @RestController
 @RequestMapping("/api/bookings")
 public class BookingController {
@@ -23,6 +29,7 @@ public class BookingController {
     private final BookingService bookingService;
     private final VehicleRepository vehicleRepository;
 
+    // Costruttore con @Autowired per l'iniezione delle dipendenze tramite Spring
     @Autowired
     public BookingController(BookingService bookingService, VehicleRepository vehicleRepository) {
         this.bookingService = bookingService;
@@ -31,19 +38,22 @@ public class BookingController {
 
     /**
      * Gestisce la richiesta POST in arrivo da Angular per creare una prenotazione.
-     * @param requestDTO Il JSON inviato dal front-end mappato nell'oggetto DTO
+     * Mappato direttamente su "/api/bookings" che è l'unico endpoint per questo controller
+     * @RequestBody indica che il corpo della richiesta HTTP conterrà un JSON 
+     * che verrà mappato nell'oggetto BookingRequestDTO.
      */
-    @PostMapping("/standard")
-    public ResponseEntity<?> createStandardBooking(@RequestBody BookingRequestDTO requestDTO) {
+    @PostMapping()
+    public ResponseEntity<?> createBooking(@RequestBody BookingRequestDTO requestDTO) {
         try {
             // 1. Recupero il veicolo dal database tramite l'ID fornito nel DTO
             Vehicle vehicle = vehicleRepository.findById(requestDTO.getVehicleId())
                     .orElseThrow(() -> new IllegalArgumentException("Veicolo non trovato"));
 
             // 2. Chiamo il Service passando la responsabilità della logica di business
-            Appointment newAppointment = bookingService.createStandardAppointment(
+            Appointment newAppointment = bookingService.createAppointment(
                     requestDTO.getDate(),
                     requestDTO.getTimeSlot(),
+                    requestDTO.getInterventionType(),
                     vehicle,
                     requestDTO.getNotes()
             );
@@ -56,11 +66,11 @@ public class BookingController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
             
         } catch (ObjectOptimisticLockingFailureException e) {
-            // RACE CONDITION INTERCETTATA DALL'OPTIMISTIC LOCKING!
+            // RACE CONDITION INTERCETTATA DALL'OPTIMISTIC LOCKING
             // Rispondiamo con 409 CONFLICT in modo che Angular possa mostrare 
             // un avviso "Siamo spiacenti, lo slot è appena stato occupato da un altro utente".
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Conflitto di prenotazione: i posti per questa data sono appena esauriti. Riprova.");
+                    .body("Siamo spiacenti, il posto è appena stato occupato da un altro utente. Riprova.");
                     
         } catch (Exception e) {
             // Qualsiasi altro errore generico (Es. 500 Internal Server Error)
