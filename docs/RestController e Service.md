@@ -30,6 +30,12 @@ Riceve un oggetto JSON con i dettagli della prenotazione e chiama il metodo `cre
 Espone il seguente endpoint:
 `POST /api/users/register` per registrare un nuovo utente.
 
+## VehicleController
+
+`VehicleController` gestisce le operazioni relative ai veicoli.
+Espone i seguenti endpoint:
+`POST /api/vehicles` per creare un nuovo veicolo.
+`GET /api/vehicles/user/{ownerId}` per ottenere la lista dei veicoli di un utente specifico.
 
 
 
@@ -46,6 +52,11 @@ Espone il metodo createAppointment che viene chiamato dal controller REST per es
 `UserService` gestisce la logica di business relativa agli utenti.
 Espone il metodo registerNewUser che viene chiamato dal controller REST per eseguire l'operazione di registrazione di un nuovo utente, verificando la disponibilità dell'email e gestendo eventuali errori.
 
+## VehicleService
+`VehicleService` gestisce la logica di business relativa ai veicoli.
+Espone il metodo createVehicle che viene chiamato dal controller REST per eseguire l'operazione di creazione di un nuovo veicolo, verificando la validità dei dati e gestendo eventuali errori.
+Espone il metodo getUserVehicles che viene chiamato dal controller REST per ottenere la lista dei veicoli di un utente specifico, restituendo una lista di oggetti VehicleResponseDTO.
+
 
 
 # I DTO (Data Transfer Object)
@@ -57,7 +68,9 @@ I dati vengono JSON vengono serializzati e deserializzati per essere inviati e r
 
 `UserRegistrationDTO`: viene utilizzato per rappresentare i dati necessari per registrare un nuovo utente.
 
-VehicleRequestDTO: viene utilizzato per rappresentare i dati necessari per creare un nuovo veicolo.
+`VehicleRequestDTO`: viene utilizzato per rappresentare i dati necessari per creare un nuovo veicolo.
+
+`VehicleResponseDTO`: viene utilizzato per rappresentare i dati necessari per restituire informazioni sui veicoli senza esporre dettagli sensibili (es. il proprietario).
 
 
 

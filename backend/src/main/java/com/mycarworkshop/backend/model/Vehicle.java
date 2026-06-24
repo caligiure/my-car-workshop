@@ -21,7 +21,7 @@ public class Vehicle {
     private String model;
 
     @Column(nullable = false)
-    private Integer registrationYear; // Evitiamo di chiamarlo solo "year" che a volte è parola riservata in SQL
+    private Integer productionYear; // Evitiamo di chiamarlo solo "year" che a volte è parola riservata in SQL
 
     @Column(nullable = false)
     private String engineType;
@@ -41,11 +41,11 @@ public class Vehicle {
     public Vehicle() {
     }
 
-    public Vehicle(String licensePlate, String brand, String model, Integer registrationYear, String engineType, User owner) {
+    public Vehicle(String licensePlate, String brand, String model, Integer productionYear, String engineType, User owner) {
         this.licensePlate = licensePlate;
         this.brand = brand;
         this.model = model;
-        this.registrationYear = registrationYear;
+        this.productionYear = productionYear;
         this.engineType = engineType;
         this.owner = owner;
     }
@@ -63,8 +63,8 @@ public class Vehicle {
     public String getModel() { return model; }
     public void setModel(String model) { this.model = model; }
 
-    public Integer getRegistrationYear() { return registrationYear; }
-    public void setRegistrationYear(Integer registrationYear) { this.registrationYear = registrationYear; }
+    public Integer getProductionYear() { return productionYear; }
+    public void setProductionYear(Integer productionYear) { this.productionYear = productionYear; }
 
     public String getEngineType() { return engineType; }
     public void setEngineType(String engineType) { this.engineType = engineType; }
