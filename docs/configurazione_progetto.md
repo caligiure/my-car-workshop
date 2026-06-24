@@ -63,3 +63,8 @@ Log in tempo reale: docker compose logs -f
 Il file di configurazione del back-end è situato al percorso backend/src/main/resources/application.properties
 
 Per avviare l'applicazione Spring Boot lanciare: ./mvnw spring-boot:run dall'interno della cartella backend
+
+### 4. Configurazione CORS per permettere al front-end Angular di chiamare le API REST del back-end Spring Boot
+
+Di base, i browser web implementano una regola di sicurezza chiamata Same-Origin Policy la quale impedisce a un'applicazione web di fare richieste HTTP a un dominio diverso da quello da cui è stata caricata. Per permettere al front-end Angular di chiamare le API REST del back-end Spring Boot, è necessario configurare il CORS (Cross-Origin Resource Sharing) nel back-end.
+La configurazione CORS è stata implementata nel file backend/src/main/java/com/mycarworkshop/backend/config/CorsConfig.java
