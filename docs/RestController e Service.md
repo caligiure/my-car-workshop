@@ -21,14 +21,14 @@ Annotazioni principali utilizzate nei Controller REST:
 `BookingController` gestisce le operazioni relative alla prenotazione degli appuntamenti.
 
 Espone il seguente endpoint:
-`POST /api/bookings`: per creare una prenotazione.
+`POST /api/bookings` per creare una prenotazione.
 Riceve un oggetto JSON con i dettagli della prenotazione e chiama il metodo `createStandardAppointment` del `BookingService`.
 
 ## UserController
 
-`UserController` è un controller REST che gestisce le operazioni relative agli utenti.
+`UserController` gestisce le operazioni relative agli utenti.
 Espone il seguente endpoint:
-`POST /api/users/register`: per registrare un nuovo utente.
+`POST /api/users/register` per registrare un nuovo utente.
 
 
 
@@ -39,8 +39,12 @@ I Service sono classi che contengono la logica di business dell'applicazione. So
 
 ## BookingService
 
-Il `BookingService` è un service che gestisce la logica di business relativa alle prenotazioni degli appuntamenti.
+`BookingService` gestisce la logica di business relativa alle prenotazioni degli appuntamenti.
 Espone il metodo createAppointment che viene chiamato dal controller REST per eseguire l'operazione di creazione di una prenotazione, verificando la disponibilità e gestendo le eventuali condizioni di concorrenza.
+
+## UserService
+`UserService` gestisce la logica di business relativa agli utenti.
+Espone il metodo registerNewUser che viene chiamato dal controller REST per eseguire l'operazione di registrazione di un nuovo utente, verificando la disponibilità dell'email e gestendo eventuali errori.
 
 
 
@@ -53,14 +57,15 @@ I dati vengono JSON vengono serializzati e deserializzati per essere inviati e r
 
 `UserRegistrationDTO`: viene utilizzato per rappresentare i dati necessari per registrare un nuovo utente.
 
+VehicleRequestDTO: viene utilizzato per rappresentare i dati necessari per creare un nuovo veicolo.
+
 
 
 # I Repository (Il livello di Accesso ai Dati)
 
-In Spring, i Repository sono interfacce che estendono l'interfaccia `JpaRepository` e forniscono metodi predefiniti per eseguire operazioni CRUD (Create, Read, Update, Delete) sul database senza dover scrivere query SQL manualmente.
+In Spring, i Repository sono interfacce che estendono l'interfaccia `JpaRepository` e forniscono metodi per eseguire operazioni CRUD (Create, Read, Update, Delete) sul database senza dover scrivere query SQL manualmente.
+L'interfaccia JpaRepository fornisce già metodi come save(), findById(), findAll(), deleteById()
 
 Questi repository fungono da ponte tra il livello di servizio (applicazione Java) e il database, consentendo di accedere e manipolare i dati in modo semplice e intuitivo.
 
-JpaRepository fornisce metodi come save(), findById(), findAll(), deleteById()
-
-Ogni repository è associato a un'entità specifica (ad esempio, `VehicleRepository` per l'entità `Vehicle`) e consente di eseguire operazioni su di essa.
+Ogni repository è associato a un'entità specifica (ad esempio, `VehicleRepository` per l'entità `Vehicle`) e consente di definire metodi personalizzati per operare su di essa (es. query SQL definite in java).

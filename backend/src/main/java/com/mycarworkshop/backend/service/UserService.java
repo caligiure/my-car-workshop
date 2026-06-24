@@ -27,9 +27,9 @@ public class UserService {
         // 2. Creazione dell'entità
         User newUser = new User();
         newUser.setEmail(registrationDTO.getEmail());
-        newUser.setNome(registrationDTO.getNome());
-        newUser.setCognome(registrationDTO.getCognome());
-        newUser.setRuolo("USER"); // Impostiamo il ruolo di default
+        newUser.setName(registrationDTO.getNome());
+        newUser.setSurname(registrationDTO.getCognome());
+        newUser.setRole("USER"); // Impostiamo il ruolo di default
         
         /* * NOTA INGEGNERISTICA SULLA SICUREZZA:
          * Al momento stiamo salvando la password in chiaro per testare il flusso base.
