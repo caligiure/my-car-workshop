@@ -4,7 +4,11 @@ Spring Security è un framework di sicurezza per applicazioni Java che fornisce 
 
 JWT (JSON Web Token) è uno standard aperto per la trasmissione sicura di informazioni tra le parti come oggetti JSON. In questo progetto, JWT viene utilizzato per autenticare gli utenti e autorizzare l'accesso alle API REST.
 
-## Il workflow di autenticazione
+## Il workflow di Autenticazione e Autorizzazione
+- Autenticazione: Verifica l'identità dell'utente (login/password) e genera un token JWT se le credenziali sono corrette.
+- Autorizzazione: Controlla se l'utente ha i permessi necessari per accedere a una determinata risorsa in base al ruolo associato al token JWT.
+
+Esempio di workflow:
 
 1. Il Login: L'utente invia email e password dal frontend Angular a Spring Boot tramite POST /api/auth/login
 
@@ -31,3 +35,7 @@ Il token ha una data di scadenza (expiration date) che viene impostata al moment
 Il token viene creato nel backend Spring Boot utilizzando la classe `JwtUtil`. Quando l'utente effettua il login con successo, il backend genera un token JWT che include l'ID dell'utente e il suo ruolo, e lo invia al frontend Angular.
 
 ## Spring Security
+Il backend Spring Boot utilizza Spring Security per proteggere le API REST. Le configurazioni principali sono definite nella classe `SecurityConfig`, dove vengono specificate le regole di accesso alle varie risorse e i filtri da applicare alle richieste HTTP.
+
+### Configurazione dei Filtri
+Spring Security utilizza filtri per intercettare le richieste HTTP e applicare le regole di sicurezza. Nel nostro progetto, abbiamo un filtro personalizzato `JwtRequestFilter` che verifica la validità del token JWT presente nell'header delle richieste. Se il token è valido, l'utente viene autenticato e può accedere alle risorse protette; altrimenti, la richiesta viene bloccata e viene restituito un errore di autorizzazione.
