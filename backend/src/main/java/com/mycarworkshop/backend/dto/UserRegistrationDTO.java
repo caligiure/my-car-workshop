@@ -8,8 +8,8 @@ public class UserRegistrationDTO {
 
     private String email;
     private String password;
-    private String nome;
-    private String cognome;
+    private String name;
+    private String surname;
 
     // Getters e Setters
     public String getEmail() { return email; }
@@ -18,9 +18,9 @@ public class UserRegistrationDTO {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
 
-    public String getCognome() { return cognome; }
-    public void setCognome(String cognome) { this.cognome = cognome; }
+    public String getSurname() { return surname; }
+    public void setSurname(String surname) { this.surname = surname; }
 }
