@@ -34,7 +34,7 @@ export const matchPasswordsValidator: ValidatorFn = (control: AbstractControl): 
   template: `
     <div class="register-card">
       <h2>Nuovo Cliente</h2>
-      <p class="subtitle">Crea il tuo profilo per registrare i veicoli e prenotare gli interventi</p>
+      <p class="subtitle">Crea il tuo profilo personale per registrare i veicoli e prenotare gli interventi</p>
 
       @if (errorMessage()) {
         <div class="alert alert-danger" role="alert">
@@ -44,6 +44,34 @@ export const matchPasswordsValidator: ValidatorFn = (control: AbstractControl): 
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         
+        <div class="form-group">
+          <label for="name">Nome</label>
+          <input 
+            id="name" 
+            type="text" 
+            formControlName="name" 
+            placeholder="Es. Mario"
+            [class.is-invalid]="isFieldInvalid('name')"
+          />
+          @if (isFieldInvalid('name')) {
+            <span class="error-text">Il nome è obbligatorio.</span>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="surname">Cognome</label>
+          <input 
+            id="surname" 
+            type="text" 
+            formControlName="surname" 
+            placeholder="Es. Rossi"
+            [class.is-invalid]="isFieldInvalid('surname')"
+          />
+          @if (isFieldInvalid('surname')) {
+            <span class="error-text">Il cognome è obbligatorio.</span>
+          }
+        </div>
+      
         <div class="form-group">
           <label for="email">Indirizzo Email</label>
           <input 
@@ -59,7 +87,7 @@ export const matchPasswordsValidator: ValidatorFn = (control: AbstractControl): 
         </div>
 
         <div class="form-group">
-          <label for="password">Password di accesso</label>
+          <label for="password">Password</label>
           <input 
             id="password" 
             type="password" 
@@ -126,12 +154,14 @@ export class RegisterComponent {
 
   // Form di registrazione con validatore (conferma password)
   registerForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    surname: ['', [Validators.required, Validators.minLength(2)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(6)]],
     confirmPassword: ['', [Validators.required]]
   }, { validators: matchPasswordsValidator });
 
-  isFieldInvalid(fieldName: 'email' | 'password'): boolean {
+  isFieldInvalid(fieldName: 'name' | 'surname' | 'email' | 'password' | 'confirmPassword'): boolean {
     const field = this.registerForm.controls[fieldName];
     return field.invalid && (field.dirty || field.touched);
   }
@@ -149,11 +179,12 @@ export class RegisterComponent {
     const payload = {
       email: this.registerForm.getRawValue().email,
       password: this.registerForm.getRawValue().password,
-      role: 'USER' // Di default un utente registrato dalla web-app pubblica è un cliente standard
+      name: this.registerForm.getRawValue().name,
+      surname: this.registerForm.getRawValue().surname
     };
 
     // Chiamata diretta al Controller REST di registrazione definito nel backend
-    this.http.post('http://localhost:8080/api/users/register', payload).subscribe({
+    this.http.post('http://localhost:8080/api/users/register', payload, { responseType: 'text' }).subscribe({
       next: () => {
         // Registrazione completata con successo: reindirizziamo imperativamente al login
         this.router.navigate(['/auth/login']);

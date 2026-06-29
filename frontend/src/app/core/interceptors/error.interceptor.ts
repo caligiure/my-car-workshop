@@ -29,9 +29,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       // GESTIONE RACE CONDITION / OPTIMISTIC LOCKING (409 Conflict)
       // L'utente ha tentato di prenotare uno slot la cui colonna @Version è cambiata un istante prima.
       if (error.status === 409) {
-        console.warn('Conflitto di concorrenza rilevato:', error.error.message);
-        // Qui agganceremo un Toast/Snackbar Notification Service per avvisare la UI
-        alert('Attenzione: Lo slot selezionato è appena stato occupato da un altro utente. Il calendario verrà aggiornato.');
+        if (req.url.includes('/appointments') || req.url.includes('/bookings')) {
+          console.warn('Conflitto di concorrenza rilevato:', error.error?.message);
+          // Qui agganceremo un Toast/Snackbar Notification Service per avvisare la UI
+          alert('Attenzione: Lo slot selezionato è appena stato occupato da un altro utente. Il calendario verrà aggiornato.');
+        }
       }
 
       // Rilancia l'errore nello stream per permettere ai singoli componenti di spegnere i propri loader spinner

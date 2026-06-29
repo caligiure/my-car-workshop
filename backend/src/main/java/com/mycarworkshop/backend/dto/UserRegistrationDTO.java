@@ -2,7 +2,6 @@ package com.mycarworkshop.backend.dto;
 
 /**
  * DTO utilizzato per il trasferimento dei dati durante la registrazione di un nuovo utente.
- * Non includiamo il campo "ruolo" perché di default ogni nuovo registrato è un "USER".
  */
 public class UserRegistrationDTO {
 
@@ -10,6 +9,7 @@ public class UserRegistrationDTO {
     private String password;
     private String name;
     private String surname;
+    private String role;
 
     // Getters e Setters
     public String getEmail() { return email; }
@@ -23,4 +23,7 @@ public class UserRegistrationDTO {
 
     public String getSurname() { return surname; }
     public void setSurname(String surname) { this.surname = surname; }
+
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 }
