@@ -2,6 +2,17 @@
 
 Officina online per la manutenzione della tua auto
 
+1. AVVIA DOCKER: 
+docker compose up --detach
+
+2. AVVIA SPRING-BOOT:
+./mvnw spring-boot:run 
+dall'interno della cartella backend
+
+3. AVVIA ANGULAR:
+ng serve
+dall'interno della cartella frontend
+
 ## Configurazione BACKEND
 
 ### 1. Generazione dell'architettura base Java con Spring Boot
@@ -46,9 +57,9 @@ Configurazione:
 
 - volumes: crea un volume persistente (mysql_data). Fa in modo che i dati salvati (utenti, veicoli, appuntamenti) non vengano distrutti quando il container viene spento.
 
-#### PRIMO AVVIO: docker compose up --detach
+PRIMO AVVIO: docker compose up --detach
 
-#### Check status container: docker ps
+Check status container: docker ps
 
 Pausa: docker compose stop
 
@@ -62,7 +73,7 @@ Log in tempo reale: docker compose logs -f
 
 Il file di configurazione del back-end è situato al percorso backend/src/main/resources/application.properties
 
-#### Per avviare l'applicazione Spring Boot lanciare: ./mvnw spring-boot:run dall'interno della cartella backend
+Per avviare l'applicazione Spring Boot lanciare: ./mvnw spring-boot:run dall'interno della cartella backend
 
 ### 4. Definizione Modelli (Entity), Repository, Controller e Service
 - Modelli (Entity): rappresentano le tabelle del database e sono definiti nel package backend/src/main/java/com/mycarworkshop/backend/model
@@ -86,7 +97,7 @@ In questa configurazione, abbiamo definito le regole di accesso alle varie rotte
 Generazione della struttura del frontend tramite Angular:
 ng new frontend --routing --style=scss
 
-#### Avvio del frontend Angular: ng serve
+Avvio del frontend Angular: ng serve dall'interno della cartella frontend
 
 ### 2. Definizione architettura Frontend Core/Shared/Features
 

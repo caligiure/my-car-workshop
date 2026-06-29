@@ -31,7 +31,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.status === 409) {
         if (req.url.includes('/appointments') || req.url.includes('/bookings')) {
           console.warn('Conflitto di concorrenza rilevato:', error.error?.message);
-          // Qui agganceremo un Toast/Snackbar Notification Service per avvisare la UI
           alert('Attenzione: Lo slot selezionato è appena stato occupato da un altro utente. Il calendario verrà aggiornato.');
         }
       }
