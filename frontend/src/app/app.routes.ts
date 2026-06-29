@@ -1,6 +1,12 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 
+/**
+ * @description Definizione dell'albero di navigazione.
+ * Applica il principio della segregazione delle responsabilità) e del Code Splitting: 
+ * ogni funzionalità è incapsulata in un modulo separato, caricato in LAZY LOADING solo quando l'utente naviga verso quella funzionalità.
+ * Questo approccio migliora le performance dell'applicazione, riducendo il tempo di caricamento iniziale e ottimizzando l'uso della memoria.
+ */
 export const routes: Routes = [
   {
     path: '', // Rotta di default: reindirizza alla dashboard se l'utente è autenticato, altrimenti al login
@@ -8,7 +14,7 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
 
-  // --- AREA PUBBLICA ---
+  // --- AREA PUBBLICA (Autenticazione) ---
   {
     path: 'auth',
     loadComponent: () => import('./layout/auth-shell/auth-shell.component').then(m => m.AuthShellComponent), // Caricamento lazy del componente AuthShellComponent
@@ -28,7 +34,7 @@ export const routes: Routes = [
   // --- AREA PRIVATA (Garage Virtuale) ---
   {
     path: 'workspace',
-    canActivate: [authGuard], // Filtro di sicurezza: impedisce l'accesso alle rotte protette se l'utente non è autenticato, reindirizzandolo al login
+    canActivate: [authGuard], // Guardia di sicurezza: impedisce l'accesso alle rotte protette se l'utente non è autenticato, reindirizzandolo al login
     loadComponent: () => import('./layout/main-shell/main-shell.component').then(m => m.MainShellComponent),
     children: [
       { 
@@ -47,7 +53,10 @@ export const routes: Routes = [
     ]
   },
 
-  // --- ROTTA DI FALLBACK (Fail-Safe) ---
+  // --- ROTTA DI FALLBACK (Wildcard Route) ---
+  // Gestione dell'errore di navigazione (404 client-side).
+  // Se l'utente digita una rotta inesistente, viene riportato all'area privata (workspace) se autenticato,
+  // altrimenti all'area pubblica (login) tramite l'authGuard.
   {
     path: '**',
     redirectTo: 'workspace' 

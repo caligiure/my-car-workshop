@@ -64,10 +64,20 @@ Il file di configurazione del back-end è situato al percorso backend/src/main/r
 
 Per avviare l'applicazione Spring Boot lanciare: ./mvnw spring-boot:run dall'interno della cartella backend
 
-### 4. Configurazione CORS per permettere al front-end Angular di chiamare le API REST del back-end Spring Boot
+### 4. Definizione Modelli (Entity), Repository, Controller e Service
+- Modelli (Entity): rappresentano le tabelle del database e sono definiti nel package backend/src/main/java/com/mycarworkshop/backend/model
+- Repository: interfacce che estendono JpaRepository e forniscono metodi per accedere ai dati nel database, definiti nel package backend/src/main/java/com/mycarworkshop/backend/repository
+- Controller: classi che gestiscono le richieste HTTP e invocano i metodi dei service, definiti nel package backend/src/main/java/com/mycarworkshop/backend/controller
+- Service: classi che contengono la logica di business e interagiscono con i repository
+
+### 5. Configurazione CORS per permettere al front-end Angular di chiamare le API REST del back-end Spring Boot
 
 Di base, i browser web implementano una regola di sicurezza chiamata Same-Origin Policy la quale impedisce a un'applicazione web di fare richieste HTTP a un dominio diverso da quello da cui è stata caricata. Per permettere al front-end Angular di chiamare le API REST del back-end Spring Boot, è necessario configurare il CORS (Cross-Origin Resource Sharing) nel back-end.
 La configurazione CORS è stata implementata nel file backend/src/main/java/com/mycarworkshop/backend/config/CorsConfig.java
+
+### 6. Configurazione Spring Security per l'autenticazione e l'autorizzazione
+La configurazione di Spring Security è stata implementata nel file backend/src/main/java/com/mycarworkshop/backend/config/SecurityConfig.java. 
+In questa configurazione, abbiamo definito le regole di accesso alle varie rotte dell'applicazione, specificando quali rotte sono pubbliche e quali richiedono l'autenticazione. Inoltre, abbiamo configurato un filtro personalizzato per gestire l'autenticazione basata su username e password, e abbiamo definito un gestore di accesso negato per gestire i casi in cui un utente non autenticato tenta di accedere a una risorsa protetta.
 
 ## Configurazione FRONTEND
 
@@ -75,7 +85,7 @@ La configurazione CORS è stata implementata nel file backend/src/main/java/com/
 Generazione della struttura del frontend tramite Angular:
 ng new frontend --routing --style=scss 
 
-### 2. Definizione architettura Enterprise Core/Shared/Features
+### 2. Definizione architettura Frontend Core/Shared/Features
 
 File di configurazione principale 'app.routes.ts': ha il compito di definire le rotte principali dell'applicazione e di caricare i moduli delle funzionalità in LAZY LOADING, cioè solo quando l'utente naviga verso una determinata funzionalità, il relativo modulo viene caricato in memoria.
 
