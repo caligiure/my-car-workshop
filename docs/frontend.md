@@ -1,5 +1,7 @@
 # Architettura Enterprise Core/Shared/Features
 
+Definiamo in TypeScript un'architettura modulare per un'applicazione Angular, suddividendo il codice in tre macro-aree: Core, Layout e Features. Ogni componente TyperScript è un modulo Angular, e ogni modulo può contenere componenti, servizi, guardie, interceptor e altre funzionalità specifiche.
+
 Core: Singleton Services, Guardie e Interceptors (Infrastruttura globale)
 
 Layout: Componenti comuni a tutte le pagine (Header, Footer, Sidebar, ecc.)
@@ -20,4 +22,19 @@ Questo componente rappresenta il contenitore grafico minimale per le pagine di l
 ## Main Shell: main-shell.component.ts
 
 Questo componente rappresenta il layout strutturale per l'area autenticata dell'applicazione, centralizzando gli elementi comuni della Dashboard (Sidebar, Header, Pulsante di Logout) e riducendo la duplicazione di codice nei componenti di business. Contiene un router-outlet per il rendering dei componenti figli (Dashboard, Veicoli, Appuntamenti) e gestisce il logout dell'utente.
+
+# Strato di comunicazione: Services & Interceptors
+
+I seguenti componenti TypeScript sono incaricati di dialogare in modo asincrono con i Controller REST di Spring Boot.
+
+- Contratti DTO (models): Interfacce TypeScript speculari ai DTO Java per garantire la tipizzazione debole lato client.
+
+- Services: un servizio che gestisce lo stato dell'identità dell'utente (ciclo di vita del JWT), rendendo l'applicazione client completamente Stateless
+
+- Interceptors: Middleware lato client per intercettare le richieste HTTP in uscita e le risposte in arrivo, consentendo di gestire in modo centralizzato l'autenticazione e gli errori.
+Fra cui:
+
+        - Auth Interceptor: Un middleware lato client per intercettare ogni richiesta HTTP in uscita e iniettare automaticamente l'header Authorization: Bearer <token>.
+
+        - Error Interceptor: Un gestore centralizzato per catturare globalmente gli errori HTTP, con un focus sullo status 409 Conflict generato dalla ObjectOptimisticLockingFailureException in caso di race condition sugli slot.
 
