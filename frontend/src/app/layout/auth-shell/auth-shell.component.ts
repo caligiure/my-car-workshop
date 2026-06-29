@@ -21,7 +21,7 @@ import { RouterOutlet } from '@angular/router';
   template: `
     <div class="auth-container">
       <header class="auth-header">
-        <h1>My Car Workshop - Accesso</h1>
+        <h1>My Car Workshop</h1>
       </header>
       
       <main class="auth-content">

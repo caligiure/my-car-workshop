@@ -46,9 +46,9 @@ Configurazione:
 
 - volumes: crea un volume persistente (mysql_data). Fa in modo che i dati salvati (utenti, veicoli, appuntamenti) non vengano distrutti quando il container viene spento.
 
-Primo avvio: docker compose up --detach
+#### PRIMO AVVIO: docker compose up --detach
 
-Check status container: docker ps
+#### Check status container: docker ps
 
 Pausa: docker compose stop
 
@@ -62,7 +62,7 @@ Log in tempo reale: docker compose logs -f
 
 Il file di configurazione del back-end è situato al percorso backend/src/main/resources/application.properties
 
-Per avviare l'applicazione Spring Boot lanciare: ./mvnw spring-boot:run dall'interno della cartella backend
+#### Per avviare l'applicazione Spring Boot lanciare: ./mvnw spring-boot:run dall'interno della cartella backend
 
 ### 4. Definizione Modelli (Entity), Repository, Controller e Service
 - Modelli (Entity): rappresentano le tabelle del database e sono definiti nel package backend/src/main/java/com/mycarworkshop/backend/model
@@ -82,8 +82,11 @@ In questa configurazione, abbiamo definito le regole di accesso alle varie rotte
 ## Configurazione FRONTEND
 
 ### 1. Generazione dell'architettura base Angular
+
 Generazione della struttura del frontend tramite Angular:
-ng new frontend --routing --style=scss 
+ng new frontend --routing --style=scss
+
+#### Avvio del frontend Angular: ng serve
 
 ### 2. Definizione architettura Frontend Core/Shared/Features
 
