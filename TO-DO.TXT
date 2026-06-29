@@ -21,3 +21,7 @@ di rimuovere gli elementi relativi alle date passate?
 
 
 Tabella configurazioni che contiene dati come CURRENT_WORKSHOP_CAPACITY (per BookingService)
+
+Migrare il salvataggio del JWT dal LocalStorage a un HttpOnly Cookie
+(best practice assoluta per mitigare gli attacchi XSS), 
+dovremo modificare esclusivamente l'AuthService. La authGuard rimarrà intatta.
