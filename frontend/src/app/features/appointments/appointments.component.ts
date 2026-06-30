@@ -56,7 +56,7 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
                 <div class="form-grid">
                   <div class="form-group">
                     <label for="date">Data Intervento</label>
-                    <input id="date" type="date" formControlName="date" (change)="onDateChange()">
+                    <input id="date" type="date" formControlName="date" (change)="onDateChange()" [min]="minDate">
                   </div>
                   <div class="form-group">
                     <label for="timeSlot">Fascia Oraria</label>
@@ -81,10 +81,10 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
                 <div class="form-group">
                   <label for="interventionType">Tipo di Intervento</label>
                   <select id="interventionType" formControlName="interventionType">
-                    <option value="DIAGNOSTICS">Diagnostica guasti</option>
-                    <option value="REGULAR_SERVICE">Tagliando</option>
-                    <option value="INSPECTION">Revisione</option>
-                    <option value="EXTRAORDINARY_MAINTENANCE">Manutenzione Straordinaria</option>
+                    <option value="DIAGNOSTICA">Diagnostica guasti</option>
+                    <option value="TAGLIANDO">Tagliando</option>
+                    <option value="REVISIONE">Revisione</option>
+                    <option value="MANUTENZIONE_STRAORDINARIA">Manutenzione Straordinaria</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -131,7 +131,7 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
                     <td>{{ b.vehicleBrand }} {{ b.vehicleModel }}<br><small class="text-muted">{{ b.vehicleLicensePlate }}</small></td>
                     <td><span class="type-badge">{{ b.interventionType }}</span></td>
                     <td><p class="table-notes">{{ b.notes || 'Nessuna nota aggiuntiva' }}</p></td>
-                    <td><span class="status-badge" [class.pending]="b.status === 'PENDING'">{{ b.status }}</span></td>
+                    <td><span class="status-badge" [class.requested]="b.status === 'RICHIESTO'">{{ b.status }}</span></td>
                   </tr>
                 }
               </tbody>
@@ -189,13 +189,15 @@ export class AppointmentsComponent implements OnInit {
   errorMessage = signal<string | null>(null);
   monthAvailabilities = signal<DailyAvailabilityDTO[]>([]);
 
+  minDate = new Date().toISOString().split('T')[0];
+
   // FORM STRUTTURATO SU CAMPI DEL BACKEND
   bookingForm = this.fb.group({
     date: ['', Validators.required],
     timeSlot: ['08:30 - 10:30', Validators.required],
     vehicleId: [null as unknown as number, Validators.required],
     notes: [''],
-    interventionType: ['REGULAR_SERVICE' as InterventionType, Validators.required]
+    interventionType: ['TAGLIANDO' as InterventionType, Validators.required]
   });
 
   constructor() {
@@ -223,6 +225,13 @@ export class AppointmentsComponent implements OnInit {
     const selectedDate = this.bookingForm.controls.date.value;
     if (!selectedDate) return;
 
+    // Controllo data passata
+    if (selectedDate < this.minDate) {
+      this.errorMessage.set('Non è possibile prenotare un appuntamento in una data passata.');
+      this.bookingForm.controls.date.setValue('');
+      return;
+    }
+
     const dateObj = new Date(selectedDate);
     const year = dateObj.getFullYear();
     const month = dateObj.getMonth() + 1; // In JS i mesi partono da 0 (Gennaio = 0)
@@ -241,9 +250,9 @@ export class AppointmentsComponent implements OnInit {
 
         // Se il giorno è registrato nel DB ed è full (available === false)
         if (dayInfo && !dayInfo.available) {
-          this.errorMessage.set(
-            `Spiacenti, per la data ${selectedDate} l'officina ha raggiunto la capacità massima di interventi (${dayInfo.currentBookings}/${dayInfo.maxCapacity}). Ti preghiamo di selezionare un altro giorno.`
-          );
+          const message = `Spiacenti, per la data ${selectedDate} l'officina ha raggiunto la capacità massima di interventi (${dayInfo.currentBookings}/${dayInfo.maxCapacity}). Ti preghiamo di selezionare un altro giorno.`;
+          this.errorMessage.set(message);
+          alert(message);
           // Svuotiamo fisicamente l'input della data, così il pulsante "Continua" si disabilita
           this.bookingForm.controls.date.setValue('');
         } else {
@@ -273,7 +282,7 @@ export class AppointmentsComponent implements OnInit {
       next: () => {
         this.isLoading.set(false);
         alert('Prenotazione accettata con successo! L\'officina ha bloccato il tuo slot.');
-        this.bookingForm.reset({ timeSlot: '08:30 - 10:30', interventionType: 'REGULAR_SERVICE' });
+        this.bookingForm.reset({ timeSlot: '08:30 - 10:30', interventionType: 'TAGLIANDO' });
         this.currentStep.set(1);
         this.activeTab.set('history');
         this.loadHistory();

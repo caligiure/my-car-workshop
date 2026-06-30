@@ -52,11 +52,17 @@ public class BookingController {
     @PostMapping()
     public ResponseEntity<?> createBooking(@RequestBody BookingRequestDTO requestDTO) {
         try {
-            // 1. Recupero il veicolo dal database tramite l'ID fornito nel DTO
+            // Controllo per impedire prenotazioni in date passate
+            if (requestDTO.getDate().isBefore(java.time.LocalDate.now())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body("Non è possibile prenotare un appuntamento in una data passata.");
+            }
+
+            // Recupero il veicolo dal database tramite l'ID fornito nel DTO
             Vehicle vehicle = vehicleRepository.findById(requestDTO.getVehicleId())
                     .orElseThrow(() -> new IllegalArgumentException("Veicolo non trovato"));
 
-            // 2. Chiamo il Service passando la responsabilità della logica di business
+            // Chiamo il Service passando la responsabilità della logica di business
             BookingResponseDTO responseDTO = bookingService.createAppointment(
                     requestDTO.getDate(),
                     requestDTO.getTimeSlot(),
@@ -64,7 +70,7 @@ public class BookingController {
                     vehicle,
                     requestDTO.getNotes());
 
-            // 3. Rispondo con 201 CREATED se tutto è andato a buon fine
+            // Rispondo con 201 CREATED se tutto è andato a buon fine
             return ResponseEntity.ok(responseDTO);
 
         } catch (IllegalStateException e) {

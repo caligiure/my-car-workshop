@@ -1,5 +1,6 @@
 // Mappatura speculare dell'enum InterventionType presente nel backend
-export type InterventionType = 'DIAGNOSTICS' | 'REGULAR_SERVICE' | 'INSPECTION' | 'EXTRAORDINARY_MAINTENANCE';
+export type InterventionType = 'DIAGNOSTICA' | 'TAGLIANDO' | 'REVISIONE' | 'MANUTENZIONE_STRAORDINARIA';
+export type AppointmentStatus = 'RICHIESTO' | 'CONFERMATO' | 'COMPLETATO' | 'ANNULLATO';
 
 // Mappatura perfetta di BookingRequestDTO.java
 export interface BookingRequestDTO {
@@ -17,7 +18,7 @@ export interface BookingResponseDTO {
   timeSlot: string;
   notes: string;
   interventionType: InterventionType;
-  status: string;
+  status: AppointmentStatus;
   vehicleBrand: string;
   vehicleModel: string;
   vehicleLicensePlate: string;

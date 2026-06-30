@@ -67,7 +67,7 @@ public class BookingService {
                 date,
                 timeSlot,
                 interventionType,
-                AppointmentStatus.REQUESTED,
+                AppointmentStatus.RICHIESTO,
                 vehicle,
                 notes);
 
