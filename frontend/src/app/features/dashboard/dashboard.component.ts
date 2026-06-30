@@ -64,8 +64,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
         <div class="info-grid">
           
           <div class="contact-details">
-            <p><strong>📍 Indirizzo:</strong> Via dei Motori, 123 - 00100 Roma (RM)</p>
+            <p><strong>📍 Indirizzo:</strong> Via dei Motoristi, 5 - 00100 Roma (RM)</p>
             <p><strong>🕒 Orari:</strong> Lun - Ven: 08:30 - 18:00</p>
+            <p><strong>📞 Telefono:</strong> +39 06 1234567</p>
+            
             
             <div class="contact-buttons">
               <a href="tel:+390612345678" class="btn-outline">📞 Chiama Subito</a>
@@ -73,15 +75,12 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
             </div>
           </div>
 
-          <div class="map-container">
-            <iframe 
-              [src]="mapUrl" 
-              width="100%" 
-              height="200" 
-              style="border:0; border-radius: 8px;" 
-              allowfullscreen="" 
-              loading="lazy">
-            </iframe>
+          <div class="mapouter">
+            <div class="gmap_canvas">
+              <iframe class="gmap_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&amp;height=200&amp;hl=en&amp;q=via dei motoristi roma&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+              <a href="https://embed-googlemap.com">google map embed html</a>
+            </div>
+            <style>.mapouter{position:relative;text-align:right;width:600px;height:200px;}.gmap_canvas {overflow:hidden;background:none!important;width:600px;height:200px;}.gmap_iframe {width:600px!important;height:200px!important;}</style>
           </div>
           
         </div>
