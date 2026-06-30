@@ -24,4 +24,10 @@ export class BookingService {
     getMyBookings(): Observable<BookingResponseDTO[]> {
         return this.http.get<BookingResponseDTO[]>(`${this.API_URL}/me`);
     }
+
+    // Observable<void> indica che non ci aspettiamo un corpo dalla risposta (solo lo stato 204)
+    deleteBooking(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.API_URL}/${id}`);
+    }
+
 }

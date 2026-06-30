@@ -122,6 +122,7 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
                   <th>Intervento</th>
                   <th>Note Tecniche</th>
                   <th>Stato</th>
+                  <th>Azioni</th>
                 </tr>
               </thead>
               <tbody>
@@ -132,6 +133,7 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
                     <td><span class="type-badge">{{ b.interventionType }}</span></td>
                     <td><p class="table-notes">{{ b.notes || 'Nessuna nota aggiuntiva' }}</p></td>
                     <td><span class="status-badge" [class.requested]="b.status === 'RICHIESTO'">{{ b.status }}</span></td>
+                    <td>@if (b.status === 'RICHIESTO') {<button class="btn-delete" (click)="onDelete(b.id)">Elimina 🗑️</button>}</td>
                   </tr>
                 }
               </tbody>
@@ -168,6 +170,19 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
     .enterprise-table th { background: #f8f9fa; font-weight: bold; }
     .status-badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; background: #e2e3e5; }
     .status-badge.pending { background: #fff3cd; color: #856404; }
+
+    .btn-delete {
+        background-color: #dc3545; 
+        color: white;
+        border: none;
+        padding: 0.4rem 0.8rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        font-size: 0.8rem;
+        transition: background-color 0.2s;
+    }
+    .btn-delete:hover { background-color: #c82333; }
     
     .warn-text { color: #dc3545; font-size: 0.85rem; margin-top: 0.5rem; }
     .alert-danger { background: #fdf7f7; color: #d9534f; padding: 0.75rem; border-radius: 4px; border-left: 4px solid #d9534f; margin-bottom: 1rem; }
@@ -307,5 +322,19 @@ export class AppointmentsComponent implements OnInit {
         this.historyLoading.set(false);
       }
     });
+  }
+
+  onDelete(id: number): void {
+    if (confirm('Sei sicuro di voler eliminare questa prenotazione?')) {
+      this.bookingService.deleteBooking(id).subscribe({
+        next: () => {
+          alert('Prenotazione eliminata con successo e posto ripristinato.');
+          this.loadHistory(); // Ricarica lo storico aggiornato
+        },
+        error: (err) => {
+          alert(err.error || 'Errore durante l\'eliminazione della prenotazione.');
+        }
+      });
+    }
   }
 }

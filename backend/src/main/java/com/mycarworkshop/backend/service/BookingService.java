@@ -127,6 +127,7 @@ public class BookingService {
 
         return appointments.stream().map(app -> {
             BookingResponseDTO dto = new BookingResponseDTO();
+            dto.setId(app.getId());
             dto.setVehicleId(app.getVehicle().getId());
             dto.setDate(app.getAppointmentDate());
             dto.setTimeSlot(app.getTimeSlot());
@@ -187,5 +188,27 @@ public class BookingService {
         }
 
         return calendar;
+    }
+
+    @Transactional
+    public void deleteAppointment(Long id, String userEmail) {
+        // Recupera l'appuntamento
+        Appointment appointment = appointmentRepo.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Prenotazione non trovata"));
+        // Controllo di sicurezza: l'utente loggato deve essere il proprietario
+        // dell'auto associata
+        if (!appointment.getVehicle().getOwner().getEmail().equals(userEmail)) {
+            throw new IllegalStateException("Non sei autorizzato a eliminare questa prenotazione");
+        }
+        // Ripristina il posto disponibile sul calendario per quella data
+        LocalDate date = appointment.getAppointmentDate();
+        dailyRepo.findById(date).ifPresent(daily -> {
+            if (daily.getCurrentBookings() > 0) {
+                daily.setCurrentBookings(daily.getCurrentBookings() - 1);
+                dailyRepo.save(daily);
+            }
+        });
+        // Elimina la prenotazione
+        appointmentRepo.delete(appointment);
     }
 }
