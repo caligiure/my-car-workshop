@@ -95,4 +95,60 @@ public class VehicleService {
             return dto;
         }).collect(Collectors.toList());
     }
+
+    @Transactional
+    public VehicleResponseDTO updateVehicle(Long id, VehicleRequestDTO requestDTO, String userEmail) {
+        // Recupero il veicolo dal database tramite ID
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Veicolo non trovato nel sistema."));
+
+        // CONTROLLO DI SICUREZZA CRITICO: l'utente possiede davvero questo veicolo?
+        // Impedisce a un utente malizioso di modificare le auto di altri cambiando l'ID
+        if (!vehicle.getOwner().getEmail().equals(userEmail)) {
+            throw new IllegalStateException("Non sei autorizzato a modificare i dati di questo veicolo.");
+        }
+
+        // Validazione targa: se la targa viene cambiata, verifichiamo che non sia già
+        // di qualcun altro
+        if (!vehicle.getLicensePlate().equals(requestDTO.getLicensePlate())) {
+            if (vehicleRepository.findByLicensePlate(requestDTO.getLicensePlate()).isPresent()) {
+                throw new IllegalArgumentException("Un veicolo con questa nuova targa è già presente nel sistema.");
+            }
+            vehicle.setLicensePlate(requestDTO.getLicensePlate());
+        }
+
+        // Aggiornamento dei campi consentiti
+        vehicle.setBrand(requestDTO.getBrand());
+        vehicle.setModel(requestDTO.getModel());
+        vehicle.setProductionYear(requestDTO.getProductionYear());
+        vehicle.setEngineType(requestDTO.getEngineType());
+
+        // Salvataggio ed estrazione del DTO di risposta pulito per Jackson
+        Vehicle updatedVehicle = vehicleRepository.save(vehicle);
+
+        VehicleResponseDTO responseDTO = new VehicleResponseDTO();
+        responseDTO.setId(updatedVehicle.getId());
+        responseDTO.setLicensePlate(updatedVehicle.getLicensePlate());
+        responseDTO.setBrand(updatedVehicle.getBrand());
+        responseDTO.setModel(updatedVehicle.getModel());
+        responseDTO.setProductionYear(updatedVehicle.getProductionYear());
+        responseDTO.setEngineType(updatedVehicle.getEngineType());
+
+        return responseDTO;
+    }
+
+    @Transactional
+    public void deleteVehicle(Long id, String userEmail) {
+        // Recupero il veicolo dal database tramite ID
+        Vehicle vehicle = vehicleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Veicolo non trovato nel sistema."));
+
+        // CONTROLLO DI SICUREZZA CRITICO: l'utente è il proprietario?
+        if (!vehicle.getOwner().getEmail().equals(userEmail)) {
+            throw new IllegalStateException("Non sei autorizzato a eliminare questo veicolo.");
+        }
+
+        // Eliminazione del veicolo
+        vehicleRepository.delete(vehicle);
+    }
 }

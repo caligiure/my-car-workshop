@@ -82,4 +82,60 @@ public class VehicleController {
                     .body("Errore durante il recupero dei veicoli.");
         }
     }
+
+    /**
+     * Endpoint per la modifica dei dati di un veicolo esistente.
+     * URL: PUT http://localhost:8080/api/vehicles/{id}
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateVehicle(@PathVariable Long id, @RequestBody VehicleRequestDTO payload,
+            Principal principal) {
+        try {
+            // Estraiamo in modo sicuro l'email dal token JWT dell'utente richiedente
+            String userEmail = principal.getName();
+
+            // Invochiamo il servizio per l'aggiornamento protetto
+            VehicleResponseDTO updatedVehicle = vehicleService.updateVehicle(id, payload, userEmail);
+
+            return ResponseEntity.ok(updatedVehicle);
+        } catch (IllegalArgumentException e) {
+            // Ritorna 400 Bad Request se la targa è duplicata o l'id è inesistente
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (IllegalStateException e) {
+            // Ritorna 403 Forbidden se un utente prova a modificare l'auto di un altro
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (Exception e) {
+            logger.error("ERRORE CRITICO durante la modifica del veicolo {}. Causa: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errore interno del server durante la modifica del veicolo.");
+        }
+    }
+
+    /**
+     * Endpoint per l'eliminazione di un veicolo tramite il suo ID.
+     * Esempio di URL: DELETE http://localhost:8080/api/vehicles/5
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteVehicle(@PathVariable Long id, Principal principal) {
+        try {
+            // Estraiamo l'email del proprietario autorizzato dal token JWT
+            String userEmail = principal.getName();
+
+            // Invochiamo il metodo delete del servizio
+            vehicleService.deleteVehicle(id, userEmail);
+
+            // Standard REST: 204 No Content
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            // Ritorna 404 Not Found se il veicolo non esiste
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            // Ritorna 403 Forbidden se l'utente loggato non è il proprietario del veicolo
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (Exception e) {
+            logger.error("ERRORE CRITICO durante l'eliminazione del veicolo {}. Causa: {}", id, e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errore interno del server durante l'eliminazione del veicolo.");
+        }
+    }
 }
