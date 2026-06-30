@@ -54,7 +54,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
           <div class="card-icon">👤</div>
           <h3>Impostazioni Profilo</h3>
           <p>Modifica i tuoi dati personali o gestisci l'account.</p>
-          <button class="btn-secondary" routerLink="/workspace/profile">Modifica Profilo</button>
+          <button class="btn-primary" routerLink="/workspace/profile">Modifica Profilo</button>
         </div>
 
       </div>

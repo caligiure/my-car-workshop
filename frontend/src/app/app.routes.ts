@@ -49,6 +49,10 @@ export const routes: Routes = [
         path: 'appointments', 
         loadComponent: () => import('./features/appointments/appointments.component').then(m => m.AppointmentsComponent) 
       },
+      { 
+        path: 'profile', 
+        loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent) 
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' } // Rotta di fallback per l'area privata: se l'utente naviga su /workspace senza specificare una sottorotta, viene reindirizzato alla dashboard
     ]
   },

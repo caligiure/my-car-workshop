@@ -23,7 +23,9 @@ export class AuthService {
 
   /**
    * Esegue l'autenticazione asincrona.
-   * Utilizza l'operatore RxJS 'tap' per memorizzare il token come "Side-Effect",
+   * Utilizza l'operatore RxJS 'tap' per memorizzare il token come "Side-Effect", 
+   * cioè un'operazione che viene eseguita al di fuori del normale flusso di dati, 
+   * indipendentemente dalla gestione degli errori, 
    * lasciando intatto lo stream reattivo per i componenti sottoscrittori.
    */
   login(credentials: LoginRequestDTO): Observable<AuthResponseDTO> {
@@ -48,7 +50,7 @@ export class AuthService {
    */
   isAuthenticated(): boolean {
     const token = this.getToken();
-    
+
     if (!token) {
       return false;
     }
