@@ -20,14 +20,16 @@ public class VehicleService {
     private final VehicleRepository vehicleRepository;
     private final UserRepository userRepository;
 
-    // Autowired: costruttore che permette l'iniezione delle dipendenze dei repository necessari per il servizio
+    // Autowired: costruttore che permette l'iniezione delle dipendenze dei
+    // repository necessari per il servizio
     @Autowired
     public VehicleService(VehicleRepository vehicleRepository, UserRepository userRepository) {
         this.vehicleRepository = vehicleRepository;
         this.userRepository = userRepository;
     }
 
-    // Transactional: assicura che il metodo sia eseguito in una transazione, garantendo coerenza dei dati
+    // Transactional: assicura che il metodo sia eseguito in una transazione,
+    // garantendo coerenza dei dati
     @Transactional
     public Vehicle addVehicle(VehicleRequestDTO requestDTO) {
         // Validazione Targa: Controlliamo che l'auto non sia già registrata
@@ -37,7 +39,8 @@ public class VehicleService {
 
         // Recupero Utente: Assicuriamoci che l'ID fornito corrisponda a un utente reale
         User owner = userRepository.findById(requestDTO.getOwnerId())
-                .orElseThrow(() -> new IllegalArgumentException("Utente proprietario non trovato. Impossibile associare il veicolo."));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Utente proprietario non trovato. Impossibile associare il veicolo."));
 
         // Creazione dell'entità
         Vehicle newVehicle = new Vehicle(
@@ -46,8 +49,7 @@ public class VehicleService {
                 requestDTO.getModel(),
                 requestDTO.getProductionYear(),
                 requestDTO.getEngineType(),
-                owner
-        );
+                owner);
 
         // 4. Salvataggio
         return vehicleRepository.save(newVehicle);
@@ -55,20 +57,22 @@ public class VehicleService {
 
     /**
      * Recupera la lista dei veicoli di un utente per il "Garage Virtuale"
-     * Ottimizziamo la transazione come sola lettura (readOnly = true) per massimizzare le performance.
+     * Ottimizziamo la transazione come sola lettura (readOnly = true) per
+     * massimizzare le performance.
      */
     @Transactional(readOnly = true)
-    public List<VehicleResponseDTO> getUserVehicles(Long ownerId) {
-        
+    public List<VehicleResponseDTO> getUserVehicles(String email) {
+
         // Fail-fast validation: controlliamo prima che l'utente esista
-        if (!userRepository.existsById(ownerId)) {
-            throw new IllegalArgumentException("Utente non trovato.");
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Utente non registrato"));
+        Long ownerId = user.getId();
 
         // Recupero le entità dal DB
         List<Vehicle> vehicles = vehicleRepository.findByOwnerId(ownerId);
 
-        // Mappo la lista di Entità (Vehicle) in una lista di DTO utilizzando gli stream di Java
+        // Mappo la lista di Entità (Vehicle) in una lista di DTO utilizzando gli stream
+        // di Java
         return vehicles.stream().map(vehicle -> {
             VehicleResponseDTO dto = new VehicleResponseDTO();
             dto.setId(vehicle.getId());
