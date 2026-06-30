@@ -129,6 +129,7 @@ export class LoginComponent {
     // Chiamata asincrona al servizio di persistenza della sessione
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
+        console.log('Login effettuato con successo.');
         // Navigazione imperativa verso l'area protetta; la AuthGuard validerà il token appena salvato
         this.router.navigate(['/workspace/dashboard']);
       },
@@ -140,6 +141,7 @@ export class LoginComponent {
         } else {
           this.errorMessage.set('Errore di comunicazione con il server dell\'officina.');
         }
+        console.error('Errore durante il login: ' + err.error);
       }
     });
   }

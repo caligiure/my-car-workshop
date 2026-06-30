@@ -186,6 +186,7 @@ export class RegisterComponent {
     // Chiamata diretta al Controller REST di registrazione definito nel backend
     this.http.post('http://localhost:8080/api/users/register', payload, { responseType: 'text' }).subscribe({
       next: () => {
+        console.log('Registrazione completata con successo.');
         // Registrazione completata con successo: reindirizziamo imperativamente al login
         this.router.navigate(['/auth/login']);
       },
@@ -196,6 +197,7 @@ export class RegisterComponent {
         } else {
           this.errorMessage.set('Errore critico durante la comunicazione con il server di Spring Boot.');
         }
+        console.error('Errore durante la registrazione: ' + err.error);
       }
     });
   }

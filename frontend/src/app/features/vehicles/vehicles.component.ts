@@ -142,10 +142,12 @@ export class VehiclesComponent implements OnInit {
       next: (data) => {
         this.vehicles.set(data);
         this.isLoading.set(false);
+        console.log('Veicoli caricati con successo.');
       },
       error: (err: HttpErrorResponse) => {
-        this.errorMessage.set('Errore durante il caricamento dei veicoli: ' + err.message);
+        this.errorMessage.set('Errore durante il caricamento dei veicoli.');
         this.isLoading.set(false);
+        console.error('Errore durante il caricamento dei veicoli: ' + err.error);
       }
     });
   }
@@ -162,6 +164,7 @@ export class VehiclesComponent implements OnInit {
     this.vehicleForm.patchValue(vehicle);
     this.isFormOpen.set(true);
     this.errorMessage.set(null);
+    console.log('Modifica veicolo...');
   }
 
   deleteVehicle(id: number): void {
@@ -172,10 +175,12 @@ export class VehiclesComponent implements OnInit {
           // Aggiornamento ottimistico della UI
           this.vehicles.update(list => list.filter(v => v.id !== id));
           this.isLoading.set(false);
+          console.log('Veicolo eliminato con successo.');
         },
-        error: () => {
+        error: (err: HttpErrorResponse) => {
           this.errorMessage.set('Impossibile eliminare il veicolo.');
           this.isLoading.set(false);
+          console.error('Errore durante l\'eliminazione del veicolo: ' + err.error);
         }
       });
     }
@@ -194,6 +199,7 @@ export class VehiclesComponent implements OnInit {
         next: () => {
           this.loadVehicles(); // Ricarica la lista aggiornata
           this.toggleForm();
+          console.log('Veicolo modificato con successo.');
         },
         error: (err: HttpErrorResponse) => this.handleError(err)
       });
@@ -203,6 +209,7 @@ export class VehiclesComponent implements OnInit {
         next: () => {
           this.loadVehicles();
           this.toggleForm();
+          console.log('Veicolo aggiunto con successo.');
         },
         error: (err: HttpErrorResponse) => this.handleError(err)
       });
@@ -212,11 +219,13 @@ export class VehiclesComponent implements OnInit {
   private handleError(err: HttpErrorResponse): void {
     this.isLoading.set(false);
     this.errorMessage.set(err.status === 400 ? 'Dati del veicolo non validi o targa già esistente.' : 'Errore di comunicazione col server.');
+    console.error('Errore durante la gestione del veicolo: ' + err.error);
   }
 
   private resetForm(): void {
     this.vehicleForm.reset({ productionYear: new Date().getFullYear() });
     this.editingVehicleId.set(null);
     this.errorMessage.set(null);
+    console.log('Form resettato.');
   }
 }

@@ -232,7 +232,10 @@ export class AppointmentsComponent implements OnInit {
   loadVehicles(): void {
     this.vehicleService.getMyVehicles().subscribe({
       next: (cars) => this.myVehicles.set(cars),
-      error: () => this.errorMessage.set('Impossibile caricare il tuo garage virtuale.')
+      error: (error) => {
+        this.errorMessage.set('Impossibile caricare il tuo garage virtuale.');
+        console.error('Errore durante il caricamento dei veicoli: ' + error.error);
+      }
     });
   }
 
@@ -244,6 +247,7 @@ export class AppointmentsComponent implements OnInit {
     if (selectedDate < this.minDate) {
       this.errorMessage.set('Non è possibile prenotare un appuntamento in una data passata.');
       this.bookingForm.controls.date.setValue('');
+      console.error('La data elezionata è passata. Dati del giorno selezionato: ', selectedDate);
       return;
     }
 
@@ -270,16 +274,18 @@ export class AppointmentsComponent implements OnInit {
           alert(message);
           // Svuotiamo fisicamente l'input della data, così il pulsante "Continua" si disabilita
           this.bookingForm.controls.date.setValue('');
+          console.log('La data elezionata è piena. Dati del giorno selezionato: ', dayInfo);
         } else {
           // Il giorno è libero! Il form resta valido e l'utente può cliccare su "Continua"
           const occupati = dayInfo ? dayInfo.currentBookings : 0;
           console.log(`Slot confermato! Posti occupati in questa data: ${occupati}`);
         }
       },
-      error: () => {
+      error: (error) => {
         this.isLoading.set(false);
         this.errorMessage.set('Errore di comunicazione col server durante la verifica del calendario.');
         this.bookingForm.controls.date.setValue('');
+        console.error('Errore di comunicazione col server durante la verifica del calendario: ' + error.message);
       }
     });
   }
@@ -301,12 +307,14 @@ export class AppointmentsComponent implements OnInit {
         this.currentStep.set(1);
         this.activeTab.set('history');
         this.loadHistory();
+        console.log('Prenotazione accettata con successo. Slot bloccato per il giorno: ' + payload.date);
       },
       error: (err) => {
         this.isLoading.set(false);
         // Se scatta il 409 Conflict della race condition, l'ErrorInterceptor intercetta l'evento 
         // e questo blocco gestisce il feedback locale.
         this.errorMessage.set(err.error || 'Errore di saturazione o coincidenza di slot.');
+        console.error('Errore durante la creazione della prenotazione: ' + err.error);
       }
     });
   }
@@ -317,8 +325,10 @@ export class AppointmentsComponent implements OnInit {
       next: (history) => {
         this.myBookings.set(history);
         this.historyLoading.set(false);
+        console.log('Storico prenotazioni caricato con successo. Prenotazioni trovate: ' + history.length);
       },
-      error: () => {
+      error: (error) => {
+        console.error('Errore durante il caricamento dello storico delle prenotazioni: ' + error.message);
         this.historyLoading.set(false);
       }
     });
@@ -329,10 +339,12 @@ export class AppointmentsComponent implements OnInit {
       this.bookingService.deleteBooking(id).subscribe({
         next: () => {
           alert('Prenotazione eliminata con successo e posto ripristinato.');
+          console.log('Prenotazione eliminata con successo e posto ripristinato.');
           this.loadHistory(); // Ricarica lo storico aggiornato
         },
         error: (err) => {
           alert(err.error || 'Errore durante l\'eliminazione della prenotazione.');
+          console.error('Errore durante l\'eliminazione della prenotazione: ' + err.error);
         }
       });
     }
