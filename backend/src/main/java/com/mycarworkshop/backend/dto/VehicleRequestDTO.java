@@ -10,27 +10,46 @@ public class VehicleRequestDTO {
     private String model;
     private Integer productionYear;
     private String engineType;
-    
-    // Temporaneo: finché non avremo Spring Security (JWT), 
-    // il front-end dovrà dirci a quale utente associare l'auto.
-    private Long ownerId;
 
     // Getters e Setters
-    public String getLicensePlate() { return licensePlate; }
-    public void setLicensePlate(String licensePlate) { this.licensePlate = licensePlate; }
+    public String getLicensePlate() {
+        return licensePlate;
+    }
 
-    public String getBrand() { return brand; }
-    public void setBrand(String brand) { this.brand = brand; }
+    public void setLicensePlate(String licensePlate) {
+        this.licensePlate = licensePlate;
+    }
 
-    public String getModel() { return model; }
-    public void setModel(String model) { this.model = model; }
+    public String getBrand() {
+        return brand;
+    }
 
-    public Integer getProductionYear() { return productionYear; }
-    public void setProductionYear(Integer productionYear) { this.productionYear = productionYear; }
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
 
-    public String getEngineType() { return engineType; }
-    public void setEngineType(String engineType) { this.engineType = engineType; }
+    public String getModel() {
+        return model;
+    }
 
-    public Long getOwnerId() { return ownerId; }
-    public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
+    public void setModel(String model) {
+        this.model = model;
+    }
+
+    public Integer getProductionYear() {
+        return productionYear;
+    }
+
+    public void setProductionYear(Integer productionYear) {
+        this.productionYear = productionYear;
+    }
+
+    public String getEngineType() {
+        return engineType;
+    }
+
+    public void setEngineType(String engineType) {
+        this.engineType = engineType;
+    }
+
 }

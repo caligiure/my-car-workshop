@@ -31,16 +31,16 @@ public class VehicleService {
     // Transactional: assicura che il metodo sia eseguito in una transazione,
     // garantendo coerenza dei dati
     @Transactional
-    public Vehicle addVehicle(VehicleRequestDTO requestDTO) {
+    public VehicleResponseDTO addVehicle(VehicleRequestDTO requestDTO, String userEmail) {
         // Validazione Targa: Controlliamo che l'auto non sia già registrata
         if (vehicleRepository.findByLicensePlate(requestDTO.getLicensePlate()).isPresent()) {
             throw new IllegalArgumentException("Un veicolo con questa targa è già presente nel sistema.");
         }
 
-        // Recupero Utente: Assicuriamoci che l'ID fornito corrisponda a un utente reale
-        User owner = userRepository.findById(requestDTO.getOwnerId())
+        // Recupero Utente tramite l'email sicura estratta dal Token JWT
+        User owner = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new IllegalArgumentException(
-                        "Utente proprietario non trovato. Impossibile associare il veicolo."));
+                        "Utente non trovato nel sistema di sicurezza."));
 
         // Creazione dell'entità
         Vehicle newVehicle = new Vehicle(
@@ -51,8 +51,19 @@ public class VehicleService {
                 requestDTO.getEngineType(),
                 owner);
 
-        // 4. Salvataggio
-        return vehicleRepository.save(newVehicle);
+        // Salvataggio nel DB
+        Vehicle savedVehicle = vehicleRepository.save(newVehicle);
+
+        // MAPPING DA ENTITY A DTO
+        VehicleResponseDTO responseDTO = new VehicleResponseDTO();
+        responseDTO.setId(savedVehicle.getId());
+        responseDTO.setLicensePlate(savedVehicle.getLicensePlate());
+        responseDTO.setBrand(savedVehicle.getBrand());
+        responseDTO.setModel(savedVehicle.getModel());
+        responseDTO.setProductionYear(savedVehicle.getProductionYear());
+        responseDTO.setEngineType(savedVehicle.getEngineType());
+
+        return responseDTO;
     }
 
     /**

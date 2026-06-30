@@ -2,7 +2,6 @@ package com.mycarworkshop.backend.controller;
 
 import com.mycarworkshop.backend.dto.VehicleRequestDTO;
 import com.mycarworkshop.backend.dto.VehicleResponseDTO;
-import com.mycarworkshop.backend.model.Vehicle;
 import com.mycarworkshop.backend.service.VehicleService;
 
 import org.slf4j.Logger;
@@ -34,14 +33,14 @@ public class VehicleController {
      * http://localhost:8080/api/vehicles
      */
     @PostMapping
-    public ResponseEntity<?> addVehicle(@RequestBody VehicleRequestDTO requestDTO) {
+    public ResponseEntity<?> addVehicle(@RequestBody VehicleRequestDTO requestDTO, Principal principal) {
         try {
-            Vehicle createdVehicle = vehicleService.addVehicle(requestDTO);
+            // Estraiamo l'identità certa e sicura dal token JWT
+            String userEmail = principal.getName();
 
-            // Nell'app completa eviteremmo di restituire l'entità Vehicle intera
-            // per non far circolare i dati di "owner" allegati, ma useremmo un
-            // VehicleResponseDTO.
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdVehicle);
+            VehicleResponseDTO savedVehicleDTO = vehicleService.addVehicle(requestDTO, userEmail);
+
+            return ResponseEntity.ok(savedVehicleDTO);
 
         } catch (IllegalArgumentException e) {
             logger.error("ERRORE durante l'aggiunta del veicolo {}. Causa: {}", requestDTO.getLicensePlate(),
