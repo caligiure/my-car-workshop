@@ -44,17 +44,27 @@ body.dark-theme {
   .filter-section,
   .table-container,
   .login-card,
-  .vehicle-card {
+  .vehicle-card,
+  .workspace-card,
+  .form-container,
+  .empty-state,
+  .workshop-info-section,
+  .steps-indicator {
     background-color: #1e1e1e !important;
     color: #e0e0e0 !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
+    border-color: #333 !important;
   }
 
   h2,
   h3,
   span,
   p,
-  label {
+  label,
+  .appointment-list li,
+  .contact-details p,
+  .vehicle-info h4,
+  .vehicle-info p {
     color: #e0e0e0 !important;
   }
 
@@ -62,7 +72,7 @@ body.dark-theme {
     color: #aaa !important;
   }
 
-  /* Table Overrides */
+  /* Table & List Overrides */
   .enterprise-table th {
     background-color: #2c2c2c !important;
     color: #e0e0e0 !important;
@@ -70,6 +80,16 @@ body.dark-theme {
   }
 
   .enterprise-table td {
+    border-color: #444 !important;
+    color: #e0e0e0 !important;
+  }
+
+  .appointment-list li {
+    border-color: #444 !important;
+  }
+
+  /* Tabs */
+  .tabs {
     border-color: #444 !important;
   }
 
@@ -88,9 +108,32 @@ body.dark-theme {
   }
 
   /* Badges & Modals */
-  .type-badge {
+  .type-badge,
+  .status-badge {
     background-color: #333 !important;
     color: #e0e0e0 !important;
+  }
+
+  /* Specific status badge colors for dark mode to maintain readability */
+  .status-badge.pending,
+  .status-badge.requested {
+    background-color: #0c5460 !important;
+    color: #d1ecf1 !important;
+  }
+
+  .status-badge.confirmed {
+    background-color: #004085 !important;
+    color: #cce5ff !important;
+  }
+
+  .status-badge.completed {
+    background-color: #155724 !important;
+    color: #d4edda !important;
+  }
+
+  .status-badge.cancelled {
+    background-color: #721c24 !important;
+    color: #f8d7da !important;
   }
 
   .modal-content {
