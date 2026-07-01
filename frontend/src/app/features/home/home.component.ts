@@ -2,6 +2,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 import { ReviewService, ReviewDTO } from '../../core/services/review.service';
+import { AuthService } from '../../core/services/auth.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -18,7 +19,9 @@ import { DatePipe } from '@angular/common';
           <div class="theme-toggle" (click)="themeService.toggleTheme()" [class.dark-active]="themeService.isDarkMode()">
             <span class="icon">{{ themeService.isDarkMode() ? '🌙' : '☀️' }}</span>
           </div>
-          <a routerLink="/auth/login" class="btn-primary login-btn">Accedi</a>
+          <a [routerLink]="authService.isAuthenticated() ? '/workspace/dashboard' : '/auth/login'" class="btn-primary login-btn">
+            {{ authService.isAuthenticated() ? 'Area Personale' : 'Accedi' }}
+          </a>
         </div>
       </header>
 
@@ -271,6 +274,7 @@ import { DatePipe } from '@angular/common';
 })
 export class HomeComponent implements OnInit {
   public themeService = inject(ThemeService);
+  public authService = inject(AuthService);
   private reviewService = inject(ReviewService);
 
   reviews = signal<ReviewDTO[]>([]);

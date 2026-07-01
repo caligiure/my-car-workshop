@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 import { ThemeService } from '../../core/services/theme.service';
 
 /**
@@ -16,14 +16,17 @@ import { ThemeService } from '../../core/services/theme.service';
   // e può essere utilizzato direttamente senza dover essere dichiarato in un modulo.
   standalone: true,
   // Iniettiamo RouterOutlet per permettere ad Angular di renderizzare i figli (Login/Register) al suo interno
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink],
   // Definizione del template HTML per il componente. Il template include un header con il titolo dell'applicazione 
   // e un router-outlet per il rendering dei componenti figli (login, registrazione).
   template: `
     <div class="auth-container">
-      <div class="theme-toggle" (click)="themeService.toggleTheme()" [class.dark-active]="themeService.isDarkMode()">
-        <span class="icon">{{ themeService.isDarkMode() ? '🌙' : '☀️' }}</span>
-      </div>
+      <nav class="auth-topbar">
+        <a routerLink="/" class="home-link">⬅ Torna alla Home</a>
+        <div class="theme-toggle" (click)="themeService.toggleTheme()" [class.dark-active]="themeService.isDarkMode()">
+          <span class="icon">{{ themeService.isDarkMode() ? '🌙' : '☀️' }}</span>
+        </div>
+      </nav>
       <header class="auth-header">
         <h1>My Car Workshop</h1>
       </header>
@@ -47,10 +50,29 @@ import { ThemeService } from '../../core/services/theme.service';
       width: 100%;
       max-width: 400px;
     }
-    .theme-toggle {
+    .auth-topbar {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    .home-link {
+      text-decoration: none;
+      font-weight: bold;
+      color: #0056b3;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .home-link:hover {
+      background: rgba(0, 86, 179, 0.1);
+    }
+    .theme-toggle {
       cursor: pointer;
       display: flex;
       align-items: center;

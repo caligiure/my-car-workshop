@@ -54,10 +54,11 @@ import { ThemeService } from '../../core/services/theme.service';
 
       <div class="main-workspace">
         <header class="topbar">
+          <a routerLink="/" class="home-link">⬅ Home Page</a>
+          <h1>My Car Workshop - Officina Online</h1>
           <div class="theme-toggle" (click)="toggleTheme()" [class.dark-active]="themeService.isDarkMode()">
             <span class="icon">{{ themeService.isDarkMode() ? '🌙' : '☀️' }}</span>
           </div>
-          <h1>My Car Workshop - Officina Online</h1>
         </header>
         
         <main class="content">
@@ -83,8 +84,10 @@ import { ThemeService } from '../../core/services/theme.service';
     .logout-btn:hover { background: #a53125; }
     
     .main-workspace { flex: 1; display: flex; flex-direction: column; background: #f8f9fa; }
-    .topbar { height: 60px; display: flex; align-items: center; justify-content: flex-start; gap: 1rem; padding: 0 20px; background: white; border-bottom: 1px solid #dee2e6; font-weight: 500; }
+    .topbar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: white; border-bottom: 1px solid #dee2e6; font-weight: 500; }
     .topbar h1 { margin: 0; font-size: 1.25rem; color: #333; }
+    .home-link { text-decoration: none; font-weight: bold; color: #0056b3; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s; }
+    .home-link:hover { background: rgba(0, 86, 179, 0.1); }
     .content { padding: 20px; flex: 1; overflow-y: auto; }
     
     .theme-toggle { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #e9ecef; transition: background 0.3s; }
