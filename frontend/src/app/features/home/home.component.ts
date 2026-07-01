@@ -39,6 +39,10 @@ import { DatePipe } from '@angular/common';
           <img src="/images/interno_officina.png" alt="Interno Officina" />
           <div class="image-overlay">Strumentazione all'avanguardia</div>
         </div>
+        <div class="image-card">
+          <img src="/images/meccanici.png" alt="I nostri tecnici" />
+          <div class="image-overlay">I nostri tecnici</div>
+        </div>
       </section>
 
       <!-- Info Officina -->
@@ -46,10 +50,14 @@ import { DatePipe } from '@angular/common';
         <h2>Vieni a trovarci</h2>
         <div class="info-grid">
           <div class="contact-details">
-            <p><strong>📍 Indirizzo:</strong> Via dei Motori 123, 00100 Roma</p>
+            <p><strong>📍 Indirizzo:</strong> Via dei Motoristi, 5, 0100 Roma</p>
             <p><strong>📞 Telefono:</strong> +39 06 1234 5678</p>
             <p><strong>✉️ Email:</strong> info&#64;mycarworkshop.it</p>
             <p><strong>🕒 Orari:</strong> Lun - Ven: 08:30 - 18:00</p>
+          </div>
+          
+          <div class="map-container">
+            <iframe class="gmap_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&amp;height=200&amp;hl=en&amp;q=via dei motoristi roma&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
           </div>
         </div>
       </section>
@@ -190,8 +198,8 @@ import { DatePipe } from '@angular/common';
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 4px 10px rgba(54, 52, 52, 0.1);
-      width: 400px;
-      height: 250px;
+      width: 30%;
+      height: 20%;
     }
     
     .image-card img {
@@ -219,7 +227,7 @@ import { DatePipe } from '@angular/common';
     
     .info-section {
       padding: 3rem 2rem;
-      max-width: 800px;
+      max-width: 90%;
       margin: 0 auto;
       text-align: center;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
@@ -229,7 +237,33 @@ import { DatePipe } from '@angular/common';
     }
     
     .info-section h2 { margin-bottom: 1.5rem; color: #e0e0e0; }
+    
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+      text-align: left;
+    }
+    
+    @media (max-width: 768px) {
+      .info-grid { grid-template-columns: 1fr; text-align: center; }
+    }
+    
     .contact-details p { margin-bottom: 0.8rem; font-size: 1.1rem; color: #fff; }
+    
+    .map-container {
+      width: 100%;
+      height: 200px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .gmap_iframe {
+      width: 100% !important;
+      height: 100% !important;
+    }
     
     .reviews-section {
       padding: 3rem 2rem;

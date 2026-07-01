@@ -68,19 +68,10 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
             <p><strong>🕒 Orari:</strong> Lun - Ven: 08:30 - 18:00</p>
             <p><strong>📞 Telefono:</strong> +39 06 1234567</p>
             
-            
             <div class="contact-buttons">
               <a href="tel:+390612345678" class="btn-outline">📞 Chiama Subito</a>
               <a href="mailto:info@mycarworkshop.it" class="btn-outline">✉️ Invia Email</a>
             </div>
-          </div>
-
-          <div class="mapouter">
-            <div class="gmap_canvas">
-              <iframe class="gmap_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&amp;height=200&amp;hl=en&amp;q=via dei motoristi roma&amp;t=&amp;z=13&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
-              <a href="https://embed-googlemap.com">google map embed html</a>
-            </div>
-            <style>.mapouter{position:relative;text-align:right;width:600px;height:200px;}.gmap_canvas {overflow:hidden;background:none!important;width:600px;height:200px;}.gmap_iframe {width:600px!important;height:200px!important;}</style>
           </div>
           
         </div>
@@ -117,8 +108,6 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     .btn-outline { padding: 0.6rem 1.2rem; border: 2px solid #0056b3; color: #0056b3; border-radius: 4px; font-weight: bold; text-decoration: none; text-align: center; }
     .btn-outline:hover { background: #0056b3; color: #fff; }
     
-    .map-container { width: 100%; height: 200px; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid #dee2e6; }
-
     @media (max-width: 768px) {
       .info-grid { grid-template-columns: 1fr; }
     }
