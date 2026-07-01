@@ -23,10 +23,10 @@ export class AuthService {
 
   /**
    * Esegue l'autenticazione asincrona.
-   * Utilizza l'operatore RxJS 'tap' per memorizzare il token come "Side-Effect", 
+   * Utilizza l'operatore RxJS 'tap' per memorizzare il token come Side-Effect, 
    * cioè un'operazione che viene eseguita al di fuori del normale flusso di dati, 
    * indipendentemente dalla gestione degli errori, 
-   * lasciando intatto lo stream reattivo per i componenti sottoscrittori.
+   * lasciando intatto lo stream reattivo per i componenti che ne effettuano la sottoscrizione.
    */
   login(credentials: LoginRequestDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${this.API_URL}/login`, credentials).pipe(
@@ -42,6 +42,30 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  /**
+   * Decodifica il payload del token JWT per poterne leggere i claims
+   */
+  getDecodedToken(): any | null {
+    const token = this.getToken();
+    if (!token) return null;
+    try {
+      const payloadBase64Url = token.split('.')[1];
+      if (!payloadBase64Url) return null;
+      const base64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    } catch (error) {
+      return null;
+    }
+  }
+
+  /**
+   * Restituisce il ruolo dell'utente dal token JWT
+   */
+  getRole(): string | null {
+    const payload = this.getDecodedToken();
+    return payload ? payload.role : null;
   }
 
   /**
@@ -63,26 +87,15 @@ export class AuthService {
    */
   private isTokenExpired(token: string): boolean {
     try {
-      // 1. Separiamo i 3 blocchi del token e prendiamo il Payload (indice 1)
-      const payloadBase64Url = token.split('.')[1];
-      if (!payloadBase64Url) {
-        return true;
-      }
+      const payload = this.getDecodedToken();
+      if (!payload) return true;
 
-      // 2. Conversione formale da Base64Url a Base64 Standard
-      // (I JWT usano '-' al posto di '+' e '_' al posto di '/')
-      const base64 = payloadBase64Url.replace(/-/g, '+').replace(/_/g, '/');
-
-      // 3. Decodifica ASCII tramite API nativa del browser (atob) e parsing JSON
-      const decodedJson = atob(base64);
-      const payload = JSON.parse(decodedJson);
-
-      // 4. Se il backend non ha iniettato il claim 'exp', lo consideriamo valido di default
+      // Se il backend non ha iniettato il claim 'exp', lo consideriamo valido di default
       if (!payload.exp) {
         return false;
       }
 
-      // 5. Confronto temporale: 'exp' è in secondi, Date.now() restituisce millisecondi
+      // Confronto temporale: 'exp' è in secondi, Date.now() restituisce millisecondi
       const currentTimestampInSeconds = Math.floor(Date.now() / 1000);
 
       // Se il tempo attuale ha superato o eguagliato la data di scadenza, il token è morto

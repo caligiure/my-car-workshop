@@ -130,8 +130,16 @@ export class LoginComponent {
     this.authService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         console.log('Login effettuato con successo.');
-        // Navigazione imperativa verso l'area protetta; la AuthGuard validerà il token appena salvato
-        this.router.navigate(['/workspace/dashboard']);
+        // Recuperiamo il ruolo dal token
+        const role = this.authService.getRole();
+        if (role === 'ADMIN') {
+          console.log('Login effettuato con successo. Reindirizzamento a: ' + this.router.url);
+          this.router.navigate(['/admin/dashboard']);
+        } else {
+          // Navigazione imperativa verso l'area protetta
+          console.log('Login effettuato con successo. Reindirizzamento a: ' + this.router.url);
+          this.router.navigate(['/workspace/dashboard']);
+        }
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false); // Spegnimento spinner

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 /**
  * @description Definizione dell'albero di navigazione.
@@ -54,6 +55,20 @@ export const routes: Routes = [
         loadComponent: () => import('./features/profile/profile.component').then(m => m.ProfileComponent) 
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' } // Rotta di fallback per l'area privata: se l'utente naviga su /workspace senza specificare una sottorotta, viene reindirizzato alla dashboard
+    ]
+  },
+
+  // --- AREA AMMINISTRATORE ---
+  {
+    path: 'admin',
+    canActivate: [adminGuard],
+    loadComponent: () => import('./layout/main-shell/main-shell.component').then(m => m.MainShellComponent),
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () => import('./features/admin-dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent)
+      },
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   },
 

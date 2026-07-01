@@ -60,10 +60,11 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    // Genera un token basato sull'email (username) e inserisce dati extra (l'ID dell'utente)
-    public String generateToken(String username, Long userId) {
+    // Genera un token basato sull'email (username) e inserisce dati extra (l'ID dell'utente e il ruolo)
+    public String generateToken(String username, Long userId, String role) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
+        claims.put("role", role);
         return createToken(claims, username);
     }
 

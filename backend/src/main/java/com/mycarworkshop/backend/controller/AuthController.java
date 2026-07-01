@@ -33,15 +33,14 @@ public class AuthController {
         try {
             // Spring Security prova ad autenticare con le credenziali fornite
             authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
-            );
+                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
             // Se passa, recuperiamo l'ID dell'utente dal DB
             User user = userRepository.findByEmail(loginRequest.getEmail())
                     .orElseThrow(() -> new RuntimeException("Utente non trovato"));
 
-            // Generiamo il token JWT
-            final String jwt = jwtUtil.generateToken(user.getEmail(), user.getId());
+            // Generiamo il token JWT includendo il ruolo
+            final String jwt = jwtUtil.generateToken(user.getEmail(), user.getId(), user.getRole());
 
             // Rispondiamo ad Angular con il token e l'ID utente
             return ResponseEntity.ok(new AuthResponseDTO(jwt, user.getId()));
