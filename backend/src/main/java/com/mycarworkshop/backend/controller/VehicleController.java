@@ -21,7 +21,7 @@ public class VehicleController {
     private final VehicleService vehicleService;
 
     // Inizializzazione del Logger di classe
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+    private static final Logger logger = LoggerFactory.getLogger(VehicleController.class);
 
     @Autowired
     public VehicleController(VehicleService vehicleService) {

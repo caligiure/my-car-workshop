@@ -11,6 +11,13 @@ body.dark-theme {
     background-color: #121212 !important;
   }
 
+  .hero-section {
+    background: linear-gradient(135deg, #2c3e50, #17337a);
+    color: #e0e0e0 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
+    border-color: #333 !important;
+  }
+
   .topbar {
     background-color: #1e1e1e !important;
     border-color: #333 !important;
@@ -50,8 +57,19 @@ body.dark-theme {
   .form-container,
   .empty-state,
   .workshop-info-section,
-  .steps-indicator {
+  .steps-indicator,
+  .home-header,
+  .review-form-card,
+  .review-item,
+  .reviews-section {
     background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
+    border-color: #333 !important;
+  }
+
+  .home-container {
+    background-color: #1c1f2e !important;
     color: #e0e0e0 !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
     border-color: #333 !important;
@@ -65,7 +83,8 @@ body.dark-theme {
   .appointment-list li,
   .contact-details p,
   .vehicle-info h4,
-  .vehicle-info p {
+  .vehicle-info p,
+  .logo {
     color: #e0e0e0 !important;
   }
 

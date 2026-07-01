@@ -5,6 +5,9 @@ import com.mycarworkshop.backend.dto.LoginRequestDTO;
 import com.mycarworkshop.backend.model.User;
 import com.mycarworkshop.backend.repository.UserRepository;
 import com.mycarworkshop.backend.security.JwtUtil;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +23,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserRepository userRepository) {
@@ -46,6 +50,7 @@ public class AuthController {
             return ResponseEntity.ok(new AuthResponseDTO(jwt, user.getId()));
 
         } catch (BadCredentialsException e) {
+            logger.error("ERRORE durante il login: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email o password errati.");
         }
     }

@@ -6,6 +6,8 @@ import com.mycarworkshop.backend.model.Vehicle;
 import com.mycarworkshop.backend.repository.VehicleRepository;
 import com.mycarworkshop.backend.service.BookingService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +36,8 @@ public class BookingController {
     private final BookingService bookingService;
     private final VehicleRepository vehicleRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(BookingController.class);
+
     // Costruttore con @Autowired per l'iniezione delle dipendenze tramite Spring
     @Autowired
     public BookingController(BookingService bookingService, VehicleRepository vehicleRepository) {
@@ -54,6 +58,7 @@ public class BookingController {
         try {
             // Controllo per impedire prenotazioni in date passate
             if (requestDTO.getDate().isBefore(java.time.LocalDate.now())) {
+                logger.error("ERRORE durante la creazione della prenotazione: Data non valida.");
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body("Non è possibile prenotare un appuntamento in una data passata.");
             }
@@ -71,6 +76,7 @@ public class BookingController {
                     requestDTO.getNotes());
 
             // Rispondo con 201 CREATED se tutto è andato a buon fine
+            logger.info("Prenotazione creata con successo con ID: " + responseDTO.getId());
             return ResponseEntity.ok(responseDTO);
 
         } catch (IllegalStateException e) {
@@ -82,11 +88,13 @@ public class BookingController {
             // Rispondiamo con 409 CONFLICT in modo che Angular possa mostrare
             // un avviso "Siamo spiacenti, lo slot è appena stato occupato da un altro
             // utente".
+            logger.error("ERRORE durante la creazione della prenotazione: Conflitto: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body("Siamo spiacenti, il posto è appena stato occupato da un altro utente. Riprova.");
 
         } catch (Exception e) {
             // Qualsiasi altro errore generico (Es. 500 Internal Server Error)
+            logger.error("ERRORE durante la creazione della prenotazione: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Si è verificato un errore imprevisto.");
         }
@@ -106,6 +114,7 @@ public class BookingController {
             // dell'utente
             return ResponseEntity.ok(bookingService.getAppointmentsByUserEmail(email));
         } catch (Exception e) {
+            logger.error("ERRORE durante il recupero dello storico delle prenotazioni: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore nel recupero dello storico.");
         }
     }
@@ -120,6 +129,7 @@ public class BookingController {
             // Ritorna la lista dei record DailyAvailability per il mese selezionato
             return ResponseEntity.ok(bookingService.getMonthlyAvailability(year, month));
         } catch (Exception e) {
+            logger.error("ERRORE durante il recupero del calendario: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore nel recupero del calendario.");
         }
     }
@@ -130,12 +140,16 @@ public class BookingController {
             String email = principal.getName();
             bookingService.deleteAppointment(id, email);
             // Standard REST: 204 No Content
+            logger.info("Prenotazione eliminata con successo con ID: " + id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
+            logger.error("ERRORE durante l'eliminazione della prenotazione: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (IllegalStateException e) {
+            logger.error("ERRORE durante l'eliminazione della prenotazione: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
         } catch (Exception e) {
+            logger.error("ERRORE durante l'eliminazione della prenotazione: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Errore durante l'eliminazione della prenotazione.");
         }

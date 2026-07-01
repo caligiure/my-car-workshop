@@ -10,8 +10,8 @@ import { adminGuard } from './core/guards/admin.guard';
  */
 export const routes: Routes = [
   {
-    path: '', // Rotta di default: reindirizza alla dashboard se l'utente è autenticato, altrimenti al login
-    redirectTo: 'workspace',
+    path: '',
+    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
     pathMatch: 'full'
   },
 
