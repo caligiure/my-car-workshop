@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 /**
  * @description MainShellComponent - Layout strutturale per l'area autenticata (il Garage Virtuale).
@@ -53,6 +54,9 @@ import { AuthService } from '../../core/services/auth.service';
 
       <div class="main-workspace">
         <header class="topbar">
+          <div class="theme-toggle" (click)="toggleTheme()" [class.dark-active]="themeService.isDarkMode()">
+            <span class="icon">{{ themeService.isDarkMode() ? '🌙' : '☀️' }}</span>
+          </div>
           <h1>My Car Workshop - Officina Online</h1>
         </header>
         
@@ -79,20 +83,28 @@ import { AuthService } from '../../core/services/auth.service';
     .logout-btn:hover { background: #a53125; }
     
     .main-workspace { flex: 1; display: flex; flex-direction: column; background: #f8f9fa; }
-    .topbar { height: 60px; display: flex; align-items: center; justify-content: flex-end; padding: 0 20px; background: white; border-bottom: 1px solid #dee2e6; font-weight: 500; }
+    .topbar { height: 60px; display: flex; align-items: center; justify-content: flex-start; gap: 1rem; padding: 0 20px; background: white; border-bottom: 1px solid #dee2e6; font-weight: 500; }
+    .topbar h1 { margin: 0; font-size: 1.25rem; color: #333; }
     .content { padding: 20px; flex: 1; overflow-y: auto; }
+    
+    .theme-toggle { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #e9ecef; transition: background 0.3s; }
+    .theme-toggle:hover { background: #dee2e6; }
+    .theme-toggle.dark-active { background: #34495e; }
   `]
 })
-// Definizione della classe TypeScript per il componente MainShellComponent. 
-// Contiene la logica per gestire il logout dell'utente.
 export class MainShellComponent implements OnInit {
   private router = inject(Router);
   private authService = inject(AuthService);
+  public themeService = inject(ThemeService);
 
   isAdmin = signal<boolean>(false);
 
   ngOnInit(): void {
     this.isAdmin.set(this.authService.getRole() === 'ADMIN');
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 
   /**
