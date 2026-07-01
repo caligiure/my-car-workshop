@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 /**
  * @description MainShellComponent - Layout strutturale per l'area autenticata (il Garage Virtuale).
@@ -23,26 +24,36 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
   template: `
     <div class="app-layout">
       <aside class="sidebar">
-        <div class="logo">Officina Online</div>
+        <div class="logo">Opzioni</div>
         <nav>
           <ul>
+            @if (isAdmin()) {
+              <li>
+                <a routerLink="/admin/dashboard" routerLinkActive="active-link" class="admin-link">Area Amministratore</a>
+              </li>
+            }
             <li>
-              <a routerLink="dashboard" routerLinkActive="active-link">Dashboard</a>
+              <a routerLink="/workspace/dashboard" routerLinkActive="active-link">Area Personale</a>
             </li>
             <li>
-              <a routerLink="vehicles" routerLinkActive="active-link">I Miei Veicoli</a>
+              <a routerLink="/workspace/vehicles" routerLinkActive="active-link">I Miei Veicoli</a>
             </li>
             <li>
-              <a routerLink="appointments" routerLinkActive="active-link">Prenotazioni</a>
+              <a routerLink="/workspace/appointments" routerLinkActive="active-link">Prenotazioni</a>
+            </li>
+            <li>
+              <a routerLink="/workspace/profile" routerLinkActive="active-link">Profilo</a>
+            </li>
+            <li>
+              <button class="logout-btn" (click)="onLogout()">Logout</button>
             </li>
           </ul>
         </nav>
-        <button class="logout-btn" (click)="onLogout()">Logout</button>
       </aside>
 
       <div class="main-workspace">
         <header class="topbar">
-          <span>Pannello Utente</span>
+          <h1>My Car Workshop - Officina Online</h1>
         </header>
         
         <main class="content">
@@ -54,17 +65,35 @@ import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/rou
   // Definizione degli stili CSS per il componente. Gli stili sono definiti in-line e applicati solo a questo componente.
   styles: [`
     .app-layout { display: flex; min-height: 100vh; }
-    .sidebar { width: 250px; display: flex; flex-direction: column; padding: 20px; }
-    .main-workspace { flex: 1; display: flex; flex-direction: column; }
-    .topbar { height: 60px; display: flex; align-items: center; padding: 0 20px; }
-    .content { padding: 20px; flex: 1; }
-    .active-link { font-weight: bold; } /* Segnale visivo per il Principio dell'Affordance */
+    .sidebar { width: 250px; display: flex; flex-direction: column; padding: 20px; background: #2c3e50; color: white; }
+    .logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; text-align: left; color: #ecf0f1; }
+    nav ul { list-style: none; padding: 0; margin: 0; flex: 1; }
+    nav li { margin-bottom: 0.5rem; }
+    nav a { display: block; padding: 0.75rem 1rem; color: #bdc3c7; text-decoration: none; border-radius: 4px; transition: background 0.2s, color 0.2s; }
+    nav a:hover { background: #34495e; color: white; }
+    .active-link { background: #0056b3; color: white; font-weight: bold; } /* Segnale visivo per il Principio dell'Affordance */
+    .admin-link { color: #f39c12; }
+    .active-link.admin-link { background: #e67e22; color: white; }
+    
+    .logout-btn { margin-top: auto; padding: 0.75rem; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .logout-btn:hover { background: #a53125; }
+    
+    .main-workspace { flex: 1; display: flex; flex-direction: column; background: #f8f9fa; }
+    .topbar { height: 60px; display: flex; align-items: center; justify-content: flex-end; padding: 0 20px; background: white; border-bottom: 1px solid #dee2e6; font-weight: 500; }
+    .content { padding: 20px; flex: 1; overflow-y: auto; }
   `]
 })
 // Definizione della classe TypeScript per il componente MainShellComponent. 
 // Contiene la logica per gestire il logout dell'utente.
-export class MainShellComponent {
+export class MainShellComponent implements OnInit {
   private router = inject(Router);
+  private authService = inject(AuthService);
+
+  isAdmin = signal<boolean>(false);
+
+  ngOnInit(): void {
+    this.isAdmin.set(this.authService.getRole() === 'ADMIN');
+  }
 
   /**
    * @description Pulisce lo stato di autenticazione e invalida la sessione.
@@ -72,7 +101,7 @@ export class MainShellComponent {
    * e forza il reindirizzamento immediato, attivando retroattivamente la protezione della guardia.
    */
   onLogout(): void {
-    localStorage.removeItem('access_token');
+    this.authService.logout();
     // Reindirizzamento esplicito all'area pubblica
     this.router.navigate(['/auth/login']);
   }
