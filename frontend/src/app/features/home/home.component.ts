@@ -1,6 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ThemeService } from '../../core/services/theme.service';
 import { ReviewService, ReviewDTO } from '../../core/services/review.service';
 import { DatePipe } from '@angular/common';
@@ -8,7 +7,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ReactiveFormsModule, DatePipe],
+  imports: [RouterLink, DatePipe],
   template: `
     <div class="home-container">
       
@@ -66,44 +65,7 @@ import { DatePipe } from '@angular/common';
       <section class="reviews-section">
         <h2>Dicono di noi</h2>
         
-        <div class="reviews-layout">
-          <!-- Modulo Recensione -->
-          <div class="review-form-card">
-            <h3>Lascia una recensione</h3>
-            <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
-              <div class="form-group">
-                <label for="authorName">Il tuo nome</label>
-                <input id="authorName" type="text" formControlName="authorName" placeholder="Es. Mario Rossi">
-              </div>
-              <div class="form-group">
-                <label for="rating">Valutazione</label>
-                <select id="rating" formControlName="rating">
-                  <option value="5">⭐⭐⭐⭐⭐ Eccellente</option>
-                  <option value="4">⭐⭐⭐⭐ Molto buono</option>
-                  <option value="3">⭐⭐⭐ Buono</option>
-                  <option value="2">⭐⭐ Sufficiente</option>
-                  <option value="1">⭐ Scarso</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label for="comment">Opinione</label>
-                <textarea id="comment" rows="3" formControlName="comment" placeholder="Scrivi qui la tua opinione su di noi..."></textarea>
-              </div>
-              
-              @if (reviewError()) {
-                <div class="error-msg">{{ reviewError() }}</div>
-              }
-              @if (reviewSuccess()) {
-                <div class="success-msg">Grazie per la tua recensione!</div>
-              }
-              
-              <button type="submit" class="btn-primary" [disabled]="reviewForm.invalid || isSubmitting()">
-                {{ isSubmitting() ? 'Invio in corso...' : 'Invia recensione' }}
-              </button>
-            </form>
-          </div>
-
-          <!-- Lista Recensioni -->
+        <div class="reviews-layout">          <!-- Lista Recensioni -->
           <div class="reviews-list">
             @if (reviews().length === 0) {
               <p class="text-muted">Nessuna recensione presente. Sii il primo a scriverne una!</p>
@@ -157,14 +119,12 @@ import { DatePipe } from '@angular/common';
       align-items: center;
     }
     
-    .theme-toggle { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 75px; height: 40px; border-radius: 50%; background: #e9ecef; transition: background 0.3s; }
+    .theme-toggle { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #e9ecef; transition: background 0.3s; }
     .theme-toggle:hover { background: #dee2e6; }
     .theme-toggle.dark-active { background: #34495e; }
     
-    .login-btn {
-      padding: 0.6rem 1.5rem;
-      text-decoration: none;
-    }
+    .login-btn { margin-top: auto; padding: 0.75rem; background: #007bff; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .login-btn:hover { background: #0056b3; }
     
     .hero-section {
       text-align: center;
@@ -284,39 +244,16 @@ import { DatePipe } from '@angular/common';
       flex-wrap: wrap;
     }
     
-    .review-form-card {
-      flex: 1;
-      min-width: 300px;
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-    }
-    
-    .review-form-card h3 { margin-bottom: 1rem; margin-top: 0; }
-    
-    .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
-    .form-group label { font-weight: bold; font-size: 0.9rem; margin-bottom: 0.4rem; }
-    .form-group input, .form-group select, .form-group textarea {
-      padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit;
-    }
-    
-    .btn-primary {
-      background: #0056b3; color: white; border: none; padding: 0.75rem; width: 100%;
-      border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s;
-    }
-    .btn-primary:hover { background: #004494; }
-    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
-    
     .reviews-list {
       flex: 1;
-      min-width: 300px;
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
       display: flex;
       flex-direction: column;
       gap: 1rem;
       max-height: 500px;
       overflow-y: auto;
-      padding-right: 1rem;
     }
     
     .review-item {
@@ -330,26 +267,13 @@ import { DatePipe } from '@angular/common';
     .stars { color: #f39c12; letter-spacing: 2px; }
     .review-date { font-size: 0.8rem; color: #888; margin-bottom: 0.5rem; }
     .review-text { font-style: italic; color: #555; line-height: 1.4; }
-    
-    .error-msg { color: #d9534f; margin-bottom: 1rem; font-size: 0.9rem; }
-    .success-msg { color: #28a745; margin-bottom: 1rem; font-size: 0.9rem; font-weight: bold; }
   `]
 })
 export class HomeComponent implements OnInit {
   public themeService = inject(ThemeService);
   private reviewService = inject(ReviewService);
-  private fb = inject(NonNullableFormBuilder);
 
   reviews = signal<ReviewDTO[]>([]);
-  isSubmitting = signal<boolean>(false);
-  reviewError = signal<string | null>(null);
-  reviewSuccess = signal<boolean>(false);
-
-  reviewForm = this.fb.group({
-    authorName: ['', Validators.required],
-    rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
-    comment: ['', Validators.required]
-  });
 
   ngOnInit(): void {
     this.loadReviews();
@@ -364,36 +288,5 @@ export class HomeComponent implements OnInit {
 
   getStars(rating: number): string {
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);
-  }
-
-  onSubmitReview(): void {
-    if (this.reviewForm.invalid) return;
-
-    this.isSubmitting.set(true);
-    this.reviewError.set(null);
-    this.reviewSuccess.set(false);
-
-    const payload: ReviewDTO = {
-      authorName: this.reviewForm.getRawValue().authorName,
-      rating: Number(this.reviewForm.getRawValue().rating),
-      comment: this.reviewForm.getRawValue().comment
-    };
-
-    this.reviewService.createReview(payload).subscribe({
-      next: (newReview) => {
-        this.isSubmitting.set(false);
-        this.reviewSuccess.set(true);
-        this.reviewForm.reset({ rating: 5 });
-        // Aggiungi la nuova recensione in cima alla lista
-        this.reviews.update(list => [newReview, ...list]);
-        setTimeout(() => this.reviewSuccess.set(false), 3000);
-        console.log("Recensione inviata con successo");
-      },
-      error: (err) => {
-        this.isSubmitting.set(false);
-        this.reviewError.set('Errore durante l\'invio della recensione. Riprova.');
-        console.error("Errore durante l\'invio della recensione: " + err.message);
-      }
-    });
   }
 }

@@ -4,6 +4,9 @@ import { VehicleService } from '../../core/services/vehicle.service';
 import { BookingService } from '../../core/services/booking.service';
 import { BookingResponseDTO } from '../../core/models/booking.models';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReviewService, ReviewDTO } from '../../core/services/review.service';
+import { ProfileService } from '../../core/services/profile.service';
 
 /*
   Landing page dell'area privata
@@ -11,7 +14,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ReactiveFormsModule],
   template: `
     <div class="dashboard-container">
       
@@ -59,22 +62,40 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
       </div>
 
-      <div class="workshop-info-section">
-        <h3>L'Autofficina</h3>
-        <div class="info-grid">
-          
-          <div class="contact-details">
-            <p><strong>📍 Indirizzo:</strong> Via dei Motoristi, 5 - 00100 Roma (RM)</p>
-            <p><strong>🕒 Orari:</strong> Lun - Ven: 08:30 - 18:00</p>
-            <p><strong>📞 Telefono:</strong> +39 06 1234567</p>
-            
-            <div class="contact-buttons">
-              <a href="tel:+390612345678" class="btn-outline">📞 Chiama Subito</a>
-              <a href="mailto:info@mycarworkshop.it" class="btn-outline">✉️ Invia Email</a>
-            </div>
+      <div class="review-form-card mt-2">
+        <h3>Lascia una Recensione</h3>
+        <p class="text-muted" style="margin-bottom: 1rem;">La tua opinione è importante per noi e per gli altri clienti.</p>
+        <form [formGroup]="reviewForm" (ngSubmit)="onSubmitReview()">
+          <div class="form-group">
+            <label for="authorName">Il tuo nome</label>
+            <input id="authorName" type="text" formControlName="authorName" placeholder="Es. Mario Rossi">
+          </div>
+          <div class="form-group">
+            <label for="rating">Valutazione</label>
+            <select id="rating" formControlName="rating">
+              <option value="5">⭐⭐⭐⭐⭐ Eccellente</option>
+              <option value="4">⭐⭐⭐⭐ Molto buono</option>
+              <option value="3">⭐⭐⭐ Buono</option>
+              <option value="2">⭐⭐ Sufficiente</option>
+              <option value="1">⭐ Scarso</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="comment">Opinione</label>
+            <textarea id="comment" rows="3" formControlName="comment" placeholder="Scrivi qui la tua opinione su di noi..."></textarea>
           </div>
           
-        </div>
+          @if (reviewError()) {
+            <div class="error-msg">{{ reviewError() }}</div>
+          }
+          @if (reviewSuccess()) {
+            <div class="success-msg">Grazie per la tua recensione!</div>
+          }
+          
+          <button type="submit" class="btn-primary" [disabled]="reviewForm.invalid || isSubmitting()">
+            {{ isSubmitting() ? 'Invio in corso...' : 'Invia recensione' }}
+          </button>
+        </form>
       </div>
     </div>
   `,
@@ -99,35 +120,40 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
     .btn-primary { width: 100%; padding: 0.75rem; background: #0056b3; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
     .btn-secondary { width: 100%; padding: 0.75rem; background: #6c757d; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
     
-    .workshop-info-section { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .workshop-info-section h3 { margin-bottom: 1.5rem; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+    .review-form-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .review-form-card h3 { margin-bottom: 0.5rem; font-size: 1.25rem; }
+    .mt-2 { margin-top: 2rem; }
     
-    .contact-details p { margin-bottom: 1rem; font-size: 1.05rem; }
-    .contact-buttons { display: flex; gap: 1rem; margin-top: 1.5rem; }
-    .btn-outline { padding: 0.6rem 1.2rem; border: 2px solid #0056b3; color: #0056b3; border-radius: 4px; font-weight: bold; text-decoration: none; text-align: center; }
-    .btn-outline:hover { background: #0056b3; color: #fff; }
+    .form-group { display: flex; flex-direction: column; margin-bottom: 1rem; }
+    .form-group label { font-weight: bold; font-size: 0.9rem; margin-bottom: 0.4rem; color: #333; }
+    .form-group input, .form-group select, .form-group textarea { padding: 0.6rem; border: 1px solid #ccc; border-radius: 4px; font-family: inherit; width: 100%; box-sizing: border-box; }
     
-    @media (max-width: 768px) {
-      .info-grid { grid-template-columns: 1fr; }
-    }
+    .error-msg { color: #d9534f; margin-bottom: 1rem; font-size: 0.9rem; }
+    .success-msg { color: #28a745; margin-bottom: 1rem; font-size: 0.9rem; font-weight: bold; }
   `]
 })
 export class DashboardComponent implements OnInit {
   private vehicleService = inject(VehicleService);
   private bookingService = inject(BookingService);
-  // sanitizer serve per sanificare i dati sensibili (in questo caso l'url della mappa)
   private sanitizer = inject(DomSanitizer);
-  // Stato dei dati
-  // i signal sono utilizzati per memorizzare i dati che verranno visualizzati nel template
-  // il vantaggio è che quando i dati cambiano, il template viene aggiornato automaticamente
+  private reviewService = inject(ReviewService);
+  private profileService = inject(ProfileService);
+  private fb = inject(NonNullableFormBuilder);
+
   vehicleCount = signal<number>(0);
   upcomingAppointments = signal<BookingResponseDTO[]>([]);
   isLoadingAppointments = signal<boolean>(true);
-  // URL per Google Maps (sanitizzata per iframe)
-  mapUrl: SafeResourceUrl = this.sanitizer.bypassSecurityTrustResourceUrl(
-    'https://maps.google.com/maps?q=Via%20dei%20Motori%20123,%20Roma&t=&z=15&ie=UTF8&iwloc=&output=embed'
-  );
+
+  // Review Form
+  isSubmitting = signal<boolean>(false);
+  reviewError = signal<string | null>(null);
+  reviewSuccess = signal<boolean>(false);
+
+  reviewForm = this.fb.group({
+    authorName: ['', Validators.required],
+    rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]],
+    comment: ['', Validators.required]
+  });
   ngOnInit(): void {
     // Carica il numero reale dei veicoli registrati
     this.vehicleService.getMyVehicles().subscribe({
@@ -159,6 +185,41 @@ export class DashboardComponent implements OnInit {
         this.upcomingAppointments.set([]);
         this.isLoadingAppointments.set(false);
         console.error('Errore durante il caricamento degli appuntamenti: ' + error.error);
+      }
+    });
+
+    // Precompila il nome dell'autore con i dati del profilo
+    this.profileService.getProfile().subscribe({
+      next: (profile) => {
+        this.reviewForm.patchValue({ authorName: profile.name + ' ' + profile.surname });
+      }
+    });
+  }
+
+  onSubmitReview(): void {
+    if (this.reviewForm.invalid) return;
+
+    this.isSubmitting.set(true);
+    this.reviewError.set(null);
+    this.reviewSuccess.set(false);
+
+    const payload: ReviewDTO = {
+      authorName: this.reviewForm.getRawValue().authorName,
+      rating: Number(this.reviewForm.getRawValue().rating),
+      comment: this.reviewForm.getRawValue().comment
+    };
+
+    this.reviewService.createReview(payload).subscribe({
+      next: () => {
+        this.isSubmitting.set(false);
+        this.reviewSuccess.set(true);
+        this.reviewForm.patchValue({ rating: 5, comment: '' }); // keep authorName
+        setTimeout(() => this.reviewSuccess.set(false), 3000);
+      },
+      error: (err) => {
+        this.isSubmitting.set(false);
+        this.reviewError.set('Errore durante l\'invio della recensione. Riprova.');
+        console.error(err);
       }
     });
   }

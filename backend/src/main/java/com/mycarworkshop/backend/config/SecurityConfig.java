@@ -59,10 +59,11 @@ public class SecurityConfig {
 
                 // Regole di Accesso
                 .authorizeHttpRequests(auth -> auth
-                        // Gli endpoint di login, registrazione e recensioni pubbliche devono essere
-                        // pubblici
-                        .requestMatchers("/api/auth/login", "/api/users/register", "/api/reviews").permitAll()
-                        // tutte le altre richieste richiedono il JWT
+                        // Gli endpoint di login e registrazione sono pubblici
+                        .requestMatchers("/api/auth/login", "/api/users/register").permitAll()
+                        // Solo la lettura delle recensioni è pubblica
+                        .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/reviews").permitAll()
+                        // tutte le altre richieste (incluso POST /api/reviews) richiedono il JWT
                         .anyRequest().authenticated())
 
                 // Gestione della Sessione: impostiamo STATELESS perché usiamo JWT
