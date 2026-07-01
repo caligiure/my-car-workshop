@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ThemeService } from '../../core/services/theme.service';
 
 /**
  * @description AuthShellComponent - Layout strutturale per l'area non autenticata.
@@ -20,6 +21,9 @@ import { RouterOutlet } from '@angular/router';
   // e un router-outlet per il rendering dei componenti figli (login, registrazione).
   template: `
     <div class="auth-container">
+      <div class="theme-toggle" (click)="themeService.toggleTheme()" [class.dark-active]="themeService.isDarkMode()">
+        <span class="icon">{{ themeService.isDarkMode() ? '🌙' : '☀️' }}</span>
+      </div>
       <header class="auth-header">
         <h1>My Car Workshop</h1>
       </header>
@@ -37,12 +41,30 @@ import { RouterOutlet } from '@angular/router';
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      position: relative;
     }
     .auth-content {
       width: 100%;
       max-width: 400px;
     }
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e9ecef;
+      transition: background 0.3s;
+    }
+    .theme-toggle:hover { background: #dee2e6; }
+    .theme-toggle.dark-active { background: #34495e; }
   `]
 })
-// Definizione della classe TypeScript per il componente AuthShellComponent. Attualmente, la classe non contiene logica aggiuntiva, ma può essere estesa in futuro per includere funzionalità specifiche.
-export class AuthShellComponent {}
+export class AuthShellComponent {
+  public themeService = inject(ThemeService);
+}
