@@ -101,12 +101,12 @@ import { ProfileService } from '../../core/services/profile.service';
   `,
   styles: [`
     .dashboard-container { display: flex; flex-direction: column; gap: 2rem; }
-    .welcome-header h2 { margin-bottom: 0.5rem; color: #333; }
-    .text-muted { color: #6c757d; }
+    .welcome-header h2 { margin-bottom: 0.5rem; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+    .text-muted { color: #f8f9fa; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
     
     .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
     
-    .dashboard-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); display: flex; flex-direction: column; align-items: flex-start; }
+    .dashboard-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.4); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: flex-start; }
     .card-icon { font-size: 2.5rem; margin-bottom: 1rem; }
     .dashboard-card h3 { margin-bottom: 0.5rem; font-size: 1.25rem; }
     .dashboard-card p { margin-bottom: 1.5rem; flex-grow: 1; color: #555; }
@@ -120,7 +120,7 @@ import { ProfileService } from '../../core/services/profile.service';
     .btn-primary { width: 100%; padding: 0.75rem; background: #0056b3; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
     .btn-secondary { width: 100%; padding: 0.75rem; background: #6c757d; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-align: center; text-decoration: none; }
     
-    .review-form-card { background: #fff; padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .review-form-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.4); padding: 1.5rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .review-form-card h3 { margin-bottom: 0.5rem; font-size: 1.25rem; }
     .mt-2 { margin-top: 2rem; }
     

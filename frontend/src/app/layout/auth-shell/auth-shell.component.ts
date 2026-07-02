@@ -45,6 +45,10 @@ import { ThemeService } from '../../core/services/theme.service';
       justify-content: center;
       min-height: 100vh;
       position: relative;
+      background-image: url('/images/background1.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
     .auth-content {
       width: 100%;
@@ -60,17 +64,29 @@ import { ThemeService } from '../../core/services/theme.service';
       justify-content: space-between;
       align-items: center;
       box-sizing: border-box;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      z-index: 10;
     }
     .home-link {
       text-decoration: none;
       font-weight: bold;
-      color: #0056b3;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
       padding: 0.5rem 1rem;
       border-radius: 4px;
       transition: background 0.2s;
     }
     .home-link:hover {
-      background: rgba(0, 86, 179, 0.1);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .auth-header h1 {
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+      margin-bottom: 2rem;
+      font-size: 2.5rem;
     }
     .theme-toggle {
       cursor: pointer;

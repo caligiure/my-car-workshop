@@ -8,19 +8,21 @@ body.dark-theme {
   /* Componenti Layout */
   .main-workspace,
   .app-layout {
-    background-color: #121212 !important;
+    background-color: transparent !important;
   }
 
   .hero-section {
-    background: linear-gradient(135deg, #2c3e50, #17337a);
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(8px) !important;
     color: #e0e0e0 !important;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
-    border-color: #333 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
   }
 
   .topbar {
-    background-color: #1e1e1e !important;
-    border-color: #333 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(12px) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
     color: #e0e0e0 !important;
   }
 
@@ -29,8 +31,9 @@ body.dark-theme {
   }
 
   .sidebar {
-    background: #0f171e !important;
-    border-right: 1px solid #333 !important;
+    background: rgba(15, 23, 30, 0.8) !important;
+    backdrop-filter: blur(12px) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important;
   }
 
   .theme-toggle {
@@ -61,18 +64,18 @@ body.dark-theme {
   .home-header,
   .review-form-card,
   .review-item,
-  .reviews-section {
-    background-color: #1e1e1e !important;
+  .reviews-section,
+  .info-section {
+    background-color: rgba(30, 30, 30, 0.75) !important;
+    backdrop-filter: blur(10px) !important;
     color: #e0e0e0 !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
-    border-color: #333 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
   }
 
   .home-container {
-    background-color: #1c1f2e !important;
+    background-color: transparent !important;
     color: #e0e0e0 !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
-    border-color: #333 !important;
   }
 
   h2,

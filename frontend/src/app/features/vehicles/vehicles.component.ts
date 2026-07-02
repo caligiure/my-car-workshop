@@ -87,7 +87,7 @@ import { HttpErrorResponse } from '@angular/common/http';
     </div>
   `,
   styles: [`
-    .workspace-card { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .workspace-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); }
     .header-actions { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 1rem; margin-bottom: 2rem; }
     .btn-primary { padding: 0.5rem 1rem; background: #0056b3; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
     .btn-success { padding: 0.5rem 1rem; background: #28a745; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 1rem; }
@@ -95,18 +95,18 @@ import { HttpErrorResponse } from '@angular/common/http';
     .btn-outline { padding: 0.4rem 0.8rem; border: 1px solid #0056b3; color: #0056b3; background: transparent; border-radius: 4px; cursor: pointer; }
     .btn-danger { padding: 0.4rem 0.8rem; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 0.5rem; }
     
-    .form-container { background: #f8f9fa; padding: 1.5rem; border-radius: 6px; margin-bottom: 2rem; border: 1px solid #dee2e6; }
+    .form-container { background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); padding: 1.5rem; border-radius: 6px; margin-bottom: 2rem; border: 1px solid rgba(255,255,255,0.6); }
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
     .form-group { display: flex; flex-direction: column; }
     .form-group label { font-weight: 600; font-size: 0.85rem; margin-bottom: 0.3rem; }
     .form-group input { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
     
-    .empty-state { text-align: center; padding: 3rem 1rem; background: #f8f9fa; border-radius: 6px; border: 1px dashed #ced4da; }
+    .empty-state { text-align: center; padding: 3rem 1rem; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); border-radius: 6px; border: 1px dashed rgba(0,0,0,0.2); }
     .text-muted { color: #6c757d; font-size: 0.9rem; margin-top: 0.5rem; }
     .alert-danger { background: #fdf7f7; color: #d9534f; padding: 0.75rem; border-radius: 4px; border-left: 4px solid #d9534f; margin-bottom: 1rem; }
     
     .vehicles-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; }
-    .vehicle-card { border: 1px solid #e9ecef; border-radius: 6px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
+    .vehicle-card { background: rgba(255, 255, 255, 0.6); backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.6); border-radius: 6px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: space-between; }
     .vehicle-info h4 { margin-top: 0; margin-bottom: 1rem; color: #333; }
     .vehicle-info p { margin: 0.3rem 0; font-size: 0.9rem; color: #555; }
     .vehicle-actions { margin-top: 1.5rem; display: flex; justify-content: flex-end; border-top: 1px solid #eee; padding-top: 1rem; }

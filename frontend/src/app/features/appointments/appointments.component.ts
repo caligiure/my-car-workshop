@@ -144,12 +144,12 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
     </div>
   `,
   styles: [`
-    .workspace-card { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-    .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid #f1f3f5; }
-    .tabs button { padding: 0.75rem 1.5rem; background: none; border: none; font-size: 1rem; font-weight: bold; color: #6c757d; cursor: pointer; }
+    .workspace-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); }
+    .tabs { display: flex; gap: 1rem; margin-bottom: 2rem; border-bottom: 2px solid rgba(0,0,0,0.1); }
+    .tabs button { padding: 0.75rem 1.5rem; background: none; border: none; font-size: 1rem; font-weight: bold; color: #555; cursor: pointer; text-shadow: 1px 1px 2px rgba(255,255,255,0.5); }
     .tabs button.active { color: #0056b3; border-bottom: 3px solid #0056b3; }
     
-    .steps-indicator { display: flex; justify-content: space-between; margin-bottom: 2.5rem; background: #f8f9fa; padding: 1rem; border-radius: 6px; }
+    .steps-indicator { display: flex; justify-content: space-between; margin-bottom: 2.5rem; background: rgba(255, 255, 255, 0.5); backdrop-filter: blur(5px); padding: 1rem; border-radius: 6px; border: 1px solid rgba(255,255,255,0.6); }
     .steps-indicator span { font-weight: 600; color: #adb5bd; font-size: 0.9rem; }
     .steps-indicator span.active { color: #0056b3; text-decoration: underline; }
     
@@ -167,7 +167,7 @@ import { BookingRequestDTO, BookingResponseDTO, InterventionType, DailyAvailabil
     
     .enterprise-table { width: 100%; border-collapse: collapse; margin-top: 1rem; text-align: left; }
     .enterprise-table th, .enterprise-table td { padding: 1rem; border-bottom: 1px solid #dee2e6; }
-    .enterprise-table th { background: #f8f9fa; font-weight: bold; }
+    .enterprise-table th { background: rgba(255, 255, 255, 0.5); font-weight: bold; backdrop-filter: blur(5px); }
     .status-badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem; font-weight: bold; background: #e2e3e5; }
     .status-badge.pending { background: #fff3cd; color: #856404; }
 

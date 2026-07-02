@@ -69,25 +69,32 @@ import { ThemeService } from '../../core/services/theme.service';
   `,
   // Definizione degli stili CSS per il componente. Gli stili sono definiti in-line e applicati solo a questo componente.
   styles: [`
-    .app-layout { display: flex; min-height: 100vh; }
-    .sidebar { width: 250px; display: flex; flex-direction: column; padding: 20px; background: #2c3e50; color: white; }
-    .logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; text-align: left; color: #ecf0f1; }
+    .app-layout { 
+      display: flex; 
+      min-height: 100vh; 
+      background-image: url('/images/background1.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+    .sidebar { width: 250px; display: flex; flex-direction: column; padding: 20px; background: rgba(44, 62, 80, 0.7); backdrop-filter: blur(12px); border-right: 1px solid rgba(255,255,255,0.2); color: white; }
+    .logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 2rem; text-align: left; color: #ecf0f1; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
     nav ul { list-style: none; padding: 0; margin: 0; flex: 1; }
     nav li { margin-bottom: 0.5rem; }
-    nav a { display: block; padding: 0.75rem 1rem; color: #bdc3c7; text-decoration: none; border-radius: 4px; transition: background 0.2s, color 0.2s; }
-    nav a:hover { background: #34495e; color: white; }
-    .active-link { background: #0056b3; color: white; font-weight: bold; } /* Segnale visivo per il Principio dell'Affordance */
+    nav a { display: block; padding: 0.75rem 1rem; color: #ecf0f1; text-decoration: none; border-radius: 4px; transition: background 0.2s, color 0.2s; }
+    nav a:hover { background: rgba(255, 255, 255, 0.2); color: white; }
+    .active-link { background: rgba(0, 86, 179, 0.8); color: white; font-weight: bold; } /* Segnale visivo per il Principio dell'Affordance */
     .admin-link { color: #f39c12; }
     .active-link.admin-link { background: #e67e22; color: white; }
     
     .logout-btn { margin-top: auto; padding: 0.75rem; background: #c0392b; color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; transition: background 0.2s; }
     .logout-btn:hover { background: #a53125; }
     
-    .main-workspace { flex: 1; display: flex; flex-direction: column; background: #f8f9fa; }
-    .topbar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: white; border-bottom: 1px solid #dee2e6; font-weight: 500; }
-    .topbar h1 { margin: 0; font-size: 1.25rem; color: #333; }
-    .home-link { text-decoration: none; font-weight: bold; color: #0056b3; padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s; }
-    .home-link:hover { background: rgba(0, 86, 179, 0.1); }
+    .main-workspace { flex: 1; display: flex; flex-direction: column; background: transparent; }
+    .topbar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.2); font-weight: 500; box-shadow: 0 4px 30px rgba(0,0,0,0.1); }
+    .topbar h1 { margin: 0; font-size: 1.25rem; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+    .home-link { text-decoration: none; font-weight: bold; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); padding: 0.5rem 1rem; border-radius: 4px; transition: background 0.2s; }
+    .home-link:hover { background: rgba(255, 255, 255, 0.2); }
     .content { padding: 20px; flex: 1; overflow-y: auto; }
     
     .theme-toggle { cursor: pointer; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: #e9ecef; transition: background 0.3s; }

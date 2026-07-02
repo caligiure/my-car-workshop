@@ -78,7 +78,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   `,
   // Definizione degli stili CSS per il componente di login
   styles: [`
-    .login-card { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .login-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.4); padding: 2rem; border-radius: 8px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
     .subtitle { color: #666; margin-bottom: 1.5rem; font-size: 0.9rem; }
     .form-group { display: flex; flex-direction: column; margin-bottom: 1.2rem; }
     label { font-weight: 600; margin-bottom: 0.4rem; font-size: 0.85rem; }

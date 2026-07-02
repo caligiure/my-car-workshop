@@ -68,19 +68,19 @@ import { AuthService } from '../../core/services/auth.service';
   `,
   styles: [`
     .profile-container { max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 2rem; }
-    h2 { margin-bottom: 1rem; color: #333; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
+    h2 { margin-bottom: 1rem; color: white; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 0.5rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
     
-    .profile-section { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-    .profile-section h3 { margin-bottom: 1.5rem; color: #444; border-bottom: 1px solid #eee; padding-bottom: 0.5rem; }
+    .profile-section { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(10px); padding: 2rem; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); }
+    .profile-section h3 { margin-bottom: 1.5rem; color: #333; border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 0.5rem; }
     
-    .danger-zone { border: 2px solid #dc3545; background-color: #fff8f8; }
-    .danger-zone h3 { color: #dc3545; border-bottom-color: #f5c6cb; }
+    .danger-zone { border: 2px solid rgba(220, 53, 69, 0.5); background-color: rgba(255, 248, 248, 0.85); }
+    .danger-zone h3 { color: #dc3545; border-bottom-color: rgba(220, 53, 69, 0.2); }
     .danger-zone p { color: #721c24; margin-bottom: 1rem; }
     
     .mt-2 { margin-top: 1rem; }
     
     .form-group { display: flex; flex-direction: column; margin-bottom: 1.2rem; }
-    .form-group label { font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; color: #555; }
+    .form-group label { font-weight: 600; margin-bottom: 0.5rem; font-size: 0.9rem; color: #333; }
     .form-group input { padding: 0.6rem; border: 1px solid #ced4da; border-radius: 4px; font-size: 1rem; }
     .form-group input:disabled { background-color: #e9ecef; cursor: not-allowed; }
     
