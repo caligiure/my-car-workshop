@@ -10,7 +10,8 @@ import { AuthResponseDTO, LoginRequestDTO } from '../models/auth.models';
  */
 // @Injectable indica che questo servizio è un singleton e può essere iniettato in qualsiasi 
 // componente o servizio dell'applicazione Angular. 
-// Il token JWT viene memorizzato nel localStorage del browser per la persistenza della sessione.
+// Il token JWT viene memorizzato nel sessionStorage del browser per la persistenza della sessione 
+// e isolamento tra diverse schede.
 @Injectable({
   providedIn: 'root'
 })
@@ -18,7 +19,7 @@ export class AuthService {
   // Iniettiamo HttpClient per effettuare richieste HTTP al backend Spring Boot.
   private http = inject(HttpClient);
   private readonly API_URL = 'http://localhost:8080/api/auth';
-  // Definiamo una chiave costante per memorizzare il token JWT nel localStorage del browser.
+  // Definiamo una chiave costante per memorizzare il token JWT nel sessionStorage del browser.
   private readonly TOKEN_KEY = 'access_token';
 
   /**
@@ -31,17 +32,17 @@ export class AuthService {
   login(credentials: LoginRequestDTO): Observable<AuthResponseDTO> {
     return this.http.post<AuthResponseDTO>(`${this.API_URL}/login`, credentials).pipe(
       tap(response => {
-        localStorage.setItem(this.TOKEN_KEY, response.token);
+        sessionStorage.setItem(this.TOKEN_KEY, response.token);
       })
     );
   }
 
   logout(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.TOKEN_KEY);
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return sessionStorage.getItem(this.TOKEN_KEY);
   }
 
   /**
