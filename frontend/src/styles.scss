@@ -113,7 +113,17 @@ body.dark-theme {
 
   /* Tabs */
   .tabs {
-    border-color: #444 !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  .tabs button {
+    color: #e0e0e0 !important;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8) !important;
+  }
+  
+  .tabs button.active {
+    color: #4da3ff !important;
+    border-bottom-color: #4da3ff !important;
   }
 
   /* Form Elements Overrides */
