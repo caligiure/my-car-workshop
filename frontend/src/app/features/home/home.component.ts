@@ -90,12 +90,19 @@ import { DatePipe } from '@angular/common';
     </div>
   `,
   styles: [`
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .home-container {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      background-color: var(--bg-color, #f8f9fa);
-      background-image: linear-gradient(135deg, #502c2cff, #3498db);
+      background-image: url('/images/background1.png');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
     
     .home-header {
@@ -103,17 +110,21 @@ import { DatePipe } from '@angular/common';
       justify-content: space-between;
       align-items: center;
       padding: 1rem 2rem;
-      background: #fff;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
       position: sticky;
       top: 0;
       z-index: 100;
+      animation: fadeInUp 0.8s ease-out;
     }
     
     .logo {
       font-size: 1.5rem;
       font-weight: bold;
-      color: #2c3e50;
+      color: white;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
     }
     
     .header-actions {
@@ -131,21 +142,25 @@ import { DatePipe } from '@angular/common';
     
     .hero-section {
       text-align: center;
-      padding: 4rem 2rem;
-      background: linear-gradient(135deg, #2c3e50, #3498db);
+      padding: 6rem 2rem;
+      background: rgba(44, 62, 80, 0.6);
+      backdrop-filter: blur(8px);
       color: white;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
     }
     
     .hero-section h1 {
-      font-size: 2.5rem;
+      font-size: 3rem;
       margin-bottom: 1rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
     }
     
     .subtitle {
-      font-size: 1.2rem;
-      opacity: 0.9;
+      font-size: 1.3rem;
+      opacity: 0.95;
       max-width: 600px;
       margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
     
     .gallery-section {
@@ -154,6 +169,7 @@ import { DatePipe } from '@angular/common';
       padding: 3rem 2rem;
       justify-content: center;
       flex-wrap: wrap;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
     }
     
     .image-card {
@@ -191,15 +207,18 @@ import { DatePipe } from '@angular/common';
     .info-section {
       padding: 3rem 2rem;
       max-width: 90%;
-      margin: 0 auto;
+      margin: 2rem auto;
       text-align: center;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5) !important;
-      border-color: #333 !important;
-      background-image: linear-gradient(135deg, #2c3e50, #3498db);
-      color: #e0e0e0 !important;
+      background: rgba(44, 62, 80, 0.7);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+      color: white !important;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
     }
     
-    .info-section h2 { margin-bottom: 1.5rem; color: #e0e0e0; }
+    .info-section h2 { margin-bottom: 1.5rem; color: white; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
     
     .info-grid {
       display: grid;
@@ -230,13 +249,16 @@ import { DatePipe } from '@angular/common';
     
     .reviews-section {
       padding: 3rem 2rem;
-      background: #eee;
+      background: rgba(238, 238, 238, 0.1);
+      backdrop-filter: blur(10px);
+      animation: fadeInUp 0.8s ease-out 0.8s both;
     }
     
     .reviews-section h2 {
       text-align: center;
       margin-bottom: 2rem;
-      color: #333;
+      color: white;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
     }
     
     .reviews-layout {
@@ -260,10 +282,11 @@ import { DatePipe } from '@angular/common';
     }
     
     .review-item {
-      background: white;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(5px);
       padding: 1.5rem;
       border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
     
     .review-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
