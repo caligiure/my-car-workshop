@@ -15,8 +15,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 /**
- * Filtro che intercetta TUTTE le richieste HTTP in ingresso per verificare la presenza di un Token JWT valido.
- * @Component indica a Spring che questa classe è un bean gestito dal contesto dell'applicazione, cioè Spring si occuperà di crearne un'istanza e gestirne il ciclo di vita.
+ * Filtro che intercetta TUTTE le richieste HTTP in ingresso per verificare la
+ * presenza di un Token JWT valido.
+ * 
+ * @Component indica a Spring che questa classe è un bean gestito dal contesto
+ *            dell'applicazione, cioè Spring si occuperà di crearne un'istanza e
+ *            gestirne il ciclo di vita.
  */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -30,7 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
-    // Override del metodo doFilterInternal che viene chiamato per ogni richiesta HTTP. Qui avviene la logica di estrazione e validazione del token JWT.
+    // Override del metodo doFilterInternal che viene chiamato per ogni richiesta
+    // HTTP. Qui avviene la logica di estrazione e validazione del token JWT.
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -41,7 +46,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
-        // Verifica se l'header inizia con "Bearer " (lo standard per i JWT) e se sì, estrai username (email)
+        // Verifica se l'header inizia con "Bearer " (lo standard per i JWT) e se sì,
+        // estrai username (email)
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             jwt = authorizationHeader.substring(7); // Rimuove "Bearer "
             try {
@@ -61,16 +67,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Se il token è valido per questo utente
             if (jwtUtil.validateToken(jwt, userDetails)) {
 
-                // Crea l'oggetto di autenticazione e lo inietta nel contesto di sicurezza di Spring
+                // Crea l'oggetto di autenticazione e lo inietta nel contesto di sicurezza di
+                // Spring
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                
+
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
-        
-        // Passa la palla al prossimo filtro (o al Controller)
+
+        // Passa la palla al prossimo filtro
         filterChain.doFilter(request, response);
     }
 }

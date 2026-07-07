@@ -32,7 +32,9 @@ public class SecurityConfig {
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
-    // Bean per la crittografia delle password
+    // Bean per la crittografia delle password (hashing)
+    // Viene chiamato da UserService quando si registra un nuovo
+    // utente per criptare la password prima di salvarla nel DB
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -40,6 +42,7 @@ public class SecurityConfig {
 
     // Costruisce l'AuthenticationManager utilizzando il PasswordEncoder e il
     // CustomUserDetailsService (ponte tra DB SQL e Spring Security)
+    // Viene chiamato da AuthController quando fa il login per autenticare l'utente
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
@@ -61,17 +64,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Gli endpoint di login e registrazione sono pubblici
                         .requestMatchers("/api/auth/login", "/api/users/register").permitAll()
-                        // Solo la lettura delle recensioni è pubblica
+                        // La lettura delle recensioni è pubblica
                         .requestMatchers(org.springframework.http.HttpMethod.GET, "/api/reviews").permitAll()
-                        // tutte le altre richieste (incluso POST /api/reviews) richiedono il JWT
+                        // Tutte le altre richieste richiedono il JWT
                         .anyRequest().authenticated())
 
                 // Gestione della Sessione: impostiamo STATELESS perché usiamo JWT
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                // Aggiungiamo il nostro filtro JWT prima di quello standard
+                // Aggiungiamo il nostro filtro JWT (definito in
+                // backend/security/JwtAuthenticationFilter) prima di quello standard (cioè
+                // prima di UsernamePasswordAuthenticationFilter)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 }
