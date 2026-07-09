@@ -32,12 +32,12 @@ public class JwtUtil {
 
     // Estrae il nome utente (email) dal token JWT
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        return extractClaim(token, claims -> claims.getSubject());
     }
 
     // Estrae la data di scadenza dal token JWT
     public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return extractClaim(token, claims -> claims.getExpiration());
     }
 
     // Estrae un claim specifico dal token JWT. Il claim è una coppia chiave-valore che può contenere informazioni aggiuntive.
